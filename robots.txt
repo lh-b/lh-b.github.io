@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://lh-b.github.io/sitemap.xml
