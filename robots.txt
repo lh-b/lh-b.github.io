@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lh-b.github.io/p/sitemap.xsd
+Sitemap: https://lh-b.github.io/sitemap.xml
