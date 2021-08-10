@@ -6,9 +6,9 @@ locale                   : "ko-KR"
 title                    : "생각을 기록하다"
 title_separator          : "|"
 subtitle                 : "Record my thoughts" # site tagline that appears below site title in masthead
-name                     : "Huiboly"
+name                     : "Huibo Ly"
 description              : "주로 프로그램 개발에 관련된 기술이나 생각을 기록하는 블로그"
-url                      : "https://huiboly.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url                      : "https://lh-b.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
@@ -21,7 +21,7 @@ words_per_minute         : 200
 comments:
   provider               : "disqus" # false (default), "disqus", "discourse", "facebook", "staticman", "staticman_v2", "utterances", "giscus", "custom"
   disqus:
-    shortname            : "Huiboly" # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
+    shortname            : "Huibo Ly" # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
   discourse:
     server               : # https://meta.discourse.org/t/embedding-discourse-comments-via-javascript/31963 , e.g.: meta.discourse.org
   facebook:
@@ -93,11 +93,11 @@ analytics:
 
 # Site Author
 author:
-  name             : "Huiboly"
+  name             : "Huibo Ly"
   avatar           : "/assets/images/profile/dev_profile.png" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "윈도우 응용프로그램 풀 스택 개발(Full-stack development) 3년차, IT 기술로 홍익인간을 실현하고자 합니다."
   location         : "South Korea"
-  email            : "lyhbo@icloud.com"
+  email            : "huiboly@gmail.com"
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
@@ -113,7 +113,7 @@ author:
       url: "https://www.facebook.com/LHintime"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/Huiboly"
+      url: "https://github.com/lh-b"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
       # url: "https://instagram.com/"
@@ -129,7 +129,7 @@ footer:
       url: "https://www.facebook.com/LHintime"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/Huiboly"
+      url: "https://github.com/lh-b"
     - label: "GitLab"
       icon: "fab fa-fw fa-gitlab"
       # url:
@@ -192,6 +192,7 @@ kramdown:
   input: GFM
   hard_wrap: false
   auto_ids: true
+  syntax_highlighter: rouge
   footnote_nr: 1
   entity_output: as_char
   toc_levels: 1..6
