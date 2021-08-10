@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://huiboly.github.io/blog//sitemap.xml
