@@ -6,6 +6,5 @@
 
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
-@import "sass-code-highlight/monokai"; // 'monokai' as example
 
 @import url('https://fonts.googleapis.com/css2?family=Sunflower:wght@300&display=swap');
