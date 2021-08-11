@@ -11,8 +11,8 @@ description              : "주로 프로그램 개발에 관련된 기술이나
 url                      : "https://lh-b.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "lh-b/p" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
-teaser                   : "assets/images/profile/banner.jpg" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
-logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
+teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
+logo                     : "assets/images/profile/banner.jpg" # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
 masthead_title           : "생각을 기록하다" # overrides the website title displayed in the masthead, use " " for no title
 breadcrumbs              : true # true, false (default)
 words_per_minute         : 200
