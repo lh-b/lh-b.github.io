@@ -7,7 +7,7 @@ title                    : "Thought Repository"
 title_separator          : "|"
 subtitle                 : "Record my thoughts" # site tagline that appears below site title in masthead
 name                     : "Huibo Ly"
-description              : "주로 프로그램 개발에 관련된 기술이나 생각을 기록하는 블로그"
+description              : "소프트웨어 개발 관련 지식에 대한 생각을 기록하는 블로그"
 url                      : "https://lh-b.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "p" # the subpath of your site, e.g. "/blog"
 repository               : "lh-b/p" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
