@@ -2,11 +2,13 @@
 main:
   - title: "About"
     url: /about/
-  - title: "Sample Posts"
+  - title: "Posts"
     url: /year-archive/
-  - title: "Sample Collections"
+  - title: "Collections"
     url: /collection-archive/
+  - title: "enuSpace Guide"
+    url: https://expnuni.github.io/enuspace_doc/
+  - title: "Theme Guide"
+    url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
   - title: "Sitemap"
     url: /sitemap/
-  - title: "Quick-Start Guide"
-    url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
