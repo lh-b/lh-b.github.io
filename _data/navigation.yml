@@ -6,9 +6,9 @@ main:
     url: /year-archive/
   - title: "Collections"
     url: /collection-archive/
-  - title: "enuSpace Guide"
+  - title: "enuSpace"
     url: https://expnuni.github.io/enuspace_doc/
-  - title: "Theme Guide"
+  - title: "Theme"
     url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
   - title: "Sitemap"
     url: /sitemap/
