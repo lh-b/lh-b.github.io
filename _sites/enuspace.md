@@ -12,7 +12,6 @@ header:
   image: assets/images/sites/enuspace-title.png
   caption: "Photo credit by **Expansion & Universal Co., Ltd**"
 ---
-
 ---
 [Homepage](http://www.enu-tech.co.kr/enuspace.html){:target="_blank"}
 
