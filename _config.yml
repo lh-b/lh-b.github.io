@@ -19,7 +19,7 @@ words_per_minute         : 200
 
 # Comments Settings
 comments:
-  provider               : "disqus" # false (default), "disqus", "discourse", "facebook", "staticman", "staticman_v2", "utterances", "giscus", "custom"
+  provider               : # false (default), "disqus", "discourse", "facebook", "staticman", "staticman_v2", "utterances", "giscus", "custom"
   disqus:
     shortname            : "Huibo Ly" # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
   discourse:
@@ -192,7 +192,6 @@ kramdown:
   input: GFM
   hard_wrap: false
   auto_ids: true
-  syntax_highlighter: rouge
   footnote_nr: 1
   entity_output: as_char
   toc_levels: 1..6
