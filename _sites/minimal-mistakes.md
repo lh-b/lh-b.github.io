@@ -1,5 +1,5 @@
 ---
-permalink: /quick-start-guide/
+permalink: /minimal-mistakes/
 title: "Minimal Mistakes"
 tags:
   - jekyll
