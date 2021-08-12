@@ -1,1 +1,1 @@
-[블로그 구경하기](https://lh-b.github.io/p)
+[웹사이트](https://lh-b.github.io/p)
