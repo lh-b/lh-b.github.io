@@ -11,7 +11,7 @@ tags:
   - 블로그
 header:
   image: assets/images/2/0.png
-  caption: "Credit by **GitHub**"
+  caption: "Credit by **GitHub. Inc.**"
 toc: true
 excerpt_separator: <!--more-->
 ---
@@ -19,7 +19,7 @@ excerpt_separator: <!--more-->
 개인 블로그를 운영하기 위한 첫걸음으로 블로그의 종류에 대하여 알아보니 네이버 블로그, 티스토리, Velog 등 여러 플랫폼이 존재했다.
 블로그에 대한 지식과 경험이 없는 상태에서 무엇을 선택할지 고민하다가 자연스럽게 개발자스러운(*배움의 길이 무궁무진한*) 플랫폼인 GitHub Pages를 선택했다.
 
-## GitHub Pages란?
+## GitHub Pages
 
 {% include video id="2MsN8gpT6jY" provider="youtube" %}
 

@@ -5,15 +5,15 @@ tags:
   - 지킬
 header:
   image: assets/images/3/0.png
-  caption: "Credit by **Jekyll**"
+  caption: "Credit by **Tom Preston-Werner**"
 toc: true
 excerpt_separator: <!--more-->
 ---
 ---
-## Jekyll이란?
+## Jekyll
 
 Jekyll은 동적 객체 지향 스크립트 언어인 루비(*Ruby*) 기반으로 개발된 하나의 라이브러리 즉 루비젬(*RubyGem*)이다.
-루비는 인터프리터(*Interpreter*) 언어의 특성에 따라 C 또는 C++과 같은 컴파일러 언어에 비해 실행 속도가 느리지만 매번 html 태그를 작성하지 않고 콘텐츠에 초점을 맞춘 Markdown 언어로 작성하여 보다 쉽게 정적 웹사이트를 생성하는 편리한 도구이다.
+루비는 인터프리터(*Interpreter*) 언어의 특성에 따라 C 또는 C++과 같은 컴파일러 언어에 비해 실행 속도가 느리지만 매번 HTML 태그를 작성하지 않고 콘텐츠에 초점을 맞춘 Markdown 언어로 작성하여 보다 쉽게 정적 웹사이트를 생성하는 편리한 도구이다.
 
 Markdown 언어에 대한 내용은 [여기](../about-markdown)에서 확인할 수 있다.
 
@@ -239,7 +239,7 @@ I hope you like it!
 
 #### 포스트 색인 생성
 
-Liquid와 html 태그를 이용하여 별도의 페이지에 포스트 색인을 생성할 수 있다.
+Liquid와 HTML 태그를 이용하여 별도의 페이지에 포스트 색인을 생성할 수 있다.
 다음은 블로그 포스트 색인을 출력하는 예시이다.
 
 {% raw %}
