@@ -95,7 +95,7 @@ analytics:
 author:
   name             : "Huibo Ly"
   avatar           : "assets/images/profile/dev_profile.png" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "윈도우 응용프로그램 풀 스택 개발(Full-stack development) 3년차, IT 기술로 홍익인간을 실현하고자 합니다."
+  bio              : "응용 소프트웨어 개발자입니다. IT 기술로 홍익인간을 실현하고자 합니다."
   location         : "South Korea"
   email            : "huiboly@gmail.com"
   links:
