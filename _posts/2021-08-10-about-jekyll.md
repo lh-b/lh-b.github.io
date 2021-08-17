@@ -5,7 +5,7 @@ tags:
   - 지킬
 header:
   image: assets/images/3/0.png
-  caption: "Photo credit by **Jekyll**"
+  caption: "Credit by **Jekyll**"
 toc: true
 excerpt_separator: <!--more-->
 ---

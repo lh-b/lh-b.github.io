@@ -11,7 +11,7 @@ tags:
   - 블로그
 header:
   image: assets/images/2/0.png
-  caption: "Photo credit by **GitHub**"
+  caption: "Credit by **GitHub**"
 toc: true
 excerpt_separator: <!--more-->
 ---
