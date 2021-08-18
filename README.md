@@ -1,1 +1,1 @@
-https://lh-b.github.io/p
+https://lh-b.github.io
