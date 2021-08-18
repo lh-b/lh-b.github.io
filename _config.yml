@@ -9,8 +9,8 @@ subtitle                 : "Record my thoughts" # site tagline that appears belo
 name                     : "Huibo Ly"
 description              : "소프트웨어 개발 관련 지식에 대한 생각을 기록하는 블로그"
 url                      : "https://lh-b.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
-baseurl                  : "p" # the subpath of your site, e.g. "/blog"
-repository               : "lh-b/p" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
+baseurl                  : # the subpath of your site, e.g. "/blog"
+repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
 masthead_title           : "생각을 기록하다" # overrides the website title displayed in the masthead, use " " for no title
