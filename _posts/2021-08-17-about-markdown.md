@@ -264,14 +264,14 @@ URL이나 이메일 주소를 <>로 감싼다.
 또다른 방법으로 \<img/\> 또는 \<image/\> 태그를 이용하여 크기 조절이 가능한 이미지를 추가한다.
 
 ```html
-[![image](/assets/images/4/1.jpg "Ocean Sunrise Dawn Peninsula France Landscape")](https://www.google.com/search?q=Ocean+Sunrise+Dawn+Peninsula+France+Landscape)
+[![image](../assets/images/4/1.jpg "Ocean Sunrise Dawn Peninsula France Landscape")](https://www.google.com/search?q=Ocean+Sunrise+Dawn+Peninsula+France+Landscape)
 
-<img width="50%" src="/assets/images/4/1.jpg"/>
+<img width="50%" src="../assets/images/4/1.jpg"/>
 ```
 
-[![image](/assets/images/4/1.jpg "Ocean Sunrise Dawn Peninsula France Landscape")](https://www.google.com/search?q=Ocean+Sunrise+Dawn+Peninsula+France+Landscape)
+[![image](../assets/images/4/1.jpg "Ocean Sunrise Dawn Peninsula France Landscape")](https://www.google.com/search?q=Ocean+Sunrise+Dawn+Peninsula+France+Landscape)
 
-<img width="50%" src="/assets/images/4/1.jpg"/>
+<img width="50%" src="../assets/images/4/1.jpg"/>
 
 #### 동영상
 
@@ -284,7 +284,7 @@ Liquid 태그가 지원되는 경우 `youtube`, `vimeo`, `google-drive`, `bilibi
 [![video](http://img.youtube.com/vi/HUBNt18RFbo/0.jpg)](https://youtu.be/HUBNt18RFbo)
 
 <video width="500" height="375" controls>
-    <source src="/assets/images/4/2.mp4" type="video/mp4">
+    <source src="../assets/images/4/2.mp4" type="video/mp4">
     Your browser does not support the video tag.
 </video>
 
@@ -297,7 +297,7 @@ Liquid 태그가 지원되는 경우 `youtube`, `vimeo`, `google-drive`, `bilibi
 [![video](http://img.youtube.com/vi/HUBNt18RFbo/0.jpg)](https://youtu.be/HUBNt18RFbo)
 
 <video width="500" height="375" controls>
-    <source src="/assets/images/4/2.mp4" type="video/mp4">
+    <source src="../assets/images/4/2.mp4" type="video/mp4">
     Your browser does not support the video tag.
 </video>
 
