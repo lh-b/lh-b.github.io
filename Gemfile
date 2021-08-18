@@ -4,6 +4,6 @@ gem "jekyll"
 gem "jekyll-paginate"
 gem "jekyll-gist"
 gem "jekyll-feed"
-gem "jekyll-sitemap"
 gem "jekyll-include-cache"
+
 gem "webrick"
