@@ -260,29 +260,25 @@ URL이나 이메일 주소를 <>로 감싼다.
 
 먼저 !와 이미지 텍스트를 []로 묶고 바로 뒤에 URL을 ()로 묶는다.
 추가로 툴팁 정보를 나타내려면 URL 뒤에 툴팁 정보를 ""로 감싸 넣는다.
-이미지에 링크를 추가하려면 이미지 텍스트 서식을 링크로 감싼다.
 또다른 방법으로 \<img/\> 또는 \<image/\> 태그를 이용하여 크기 조절이 가능한 이미지를 추가한다.
 
 ```html
-[![image](../assets/images/4/1.jpg "Ocean Sunrise Dawn Peninsula France Landscape")](https://www.google.com/search?q=Ocean+Sunrise+Dawn+Peninsula+France+Landscape)
+![image](../assets/images/4/1.jpg "Ocean Sunrise Dawn Peninsula France Landscape")
 
 <img width="50%" src="../assets/images/4/1.jpg"/>
 ```
 
-[![image](../assets/images/4/1.jpg "Ocean Sunrise Dawn Peninsula France Landscape")](https://www.google.com/search?q=Ocean+Sunrise+Dawn+Peninsula+France+Landscape)
+![image](../assets/images/4/1.jpg "Ocean Sunrise Dawn Peninsula France Landscape")
 
 <img width="50%" src="../assets/images/4/1.jpg"/>
 
 #### 동영상
 
-먼저 !와 동영상 텍스트를 []로 묶고 바로 뒤에 이미지 URL을 ()로 묶는 뒤 텍스트 서식을 동영상 링크로 감싼다.
-또다른 방법으로 \<video\>\</video\> 태그나 \<iframe\>\</iframe\> 태그를 이용하여 크기 조절이 가능한 동영상을 추가한다.
+\<video\>\</video\> 태그나 \<iframe\>\</iframe\> 태그를 이용하여 크기 조절이 가능한 동영상을 추가한다.
 Liquid 태그가 지원되는 경우 `youtube`, `vimeo`, `google-drive`, `bilibili`에서 제공하는 동영상인 경우 아이디를 입력하여 동영상을 추가한다.
 
 {% raw %}
 ```html
-[![video](http://img.youtube.com/vi/HUBNt18RFbo/0.jpg)](https://youtu.be/HUBNt18RFbo)
-
 <video width="500" height="375" controls>
     <source src="../assets/images/4/2.mp4" type="video/mp4">
     Your browser does not support the video tag.
@@ -293,8 +289,6 @@ Liquid 태그가 지원되는 경우 `youtube`, `vimeo`, `google-drive`, `bilibi
 {% include video id="HUBNt18RFbo" provider="youtube" %}
 ```
 {% endraw %}
-
-[![video](http://img.youtube.com/vi/HUBNt18RFbo/0.jpg)](https://youtu.be/HUBNt18RFbo)
 
 <video width="500" height="375" controls>
     <source src="../assets/images/4/2.mp4" type="video/mp4">
