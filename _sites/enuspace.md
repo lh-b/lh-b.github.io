@@ -19,6 +19,6 @@ enuSpace는 동적 디스플레이와 시뮬레이션 도구가 통합되어 로
 
 enuSpace는 소프트웨어 개발자 도구(Software Development Kit :SDK)를 제공하며, SDK 그래픽 기능을 활용하여 빠르고 수려한 윈도우 그래픽 프로그램을 개발하는데 강력한 엔진을 제공한다.
 
-[공식 홈페이지](http://www.enu-tech.co.kr/enuspace.html){:target="_blank"}
+[홈페이지](http://www.enu-tech.co.kr/enuspace.html){:target="_blank"}
 
-[매뉴얼 홈페이지](https://expnuni.github.io/enuspace_doc/){:target="_blank"}
+[매뉴얼](https://expnuni.github.io/enuspace_doc/){:target="_blank"}
