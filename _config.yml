@@ -13,7 +13,7 @@ baseurl                  : "p" # the subpath of your site, e.g. "/blog"
 repository               : "lh-b/p" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
-favicon                  : "/assets/images/profile/favicon.ico" # path of favicon image to display in the address title left side, e.g. "/assets/images/32x32.icon"
+favicon                  : "assets/images/profile/favicon.ico" # path of favicon image to display in the address title left side, e.g. "/assets/images/32x32.icon"
 masthead_title           : "생각을 기록하다" # overrides the website title displayed in the masthead, use " " for no title
 breadcrumbs              : true # true, false (default)
 words_per_minute         : 200
@@ -96,7 +96,7 @@ analytics:
 author:
   name             : "Huibo Ly"
   avatar           : "assets/images/profile/dev_profile.png" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "응용 소프트웨어 개발자입니다. IT 기술로 홍익인간을 실현하고자 합니다."
+  bio              : "응용 소프트웨어 개발자이며, IT 분야에서 홍익인간을 실현하고자 합니다."
   location         : "South Korea"
   email            : "huiboly@gmail.com"
   links:
