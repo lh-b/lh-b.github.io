@@ -224,6 +224,7 @@ defaults:
       comments: true
       share: true
       related: true
+      sitemap: true
   # _pages
   - scope:
       path: "_pages"
@@ -241,6 +242,7 @@ defaults:
       author_profile: false
       share: false
       comments: false
+      sitemap: true
       sidebar:
         nav: "docs"
   # _portfolio
@@ -251,6 +253,7 @@ defaults:
       layout: single
       author_profile: false
       share: true
+      sitemap: true
   # _sites
   - scope:
       path: ""
@@ -260,6 +263,7 @@ defaults:
       author_profile: false
       share: true
       comment: false
+      sitemap: true
 
 
 # Sass/SCSS
