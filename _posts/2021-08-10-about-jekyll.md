@@ -6,6 +6,7 @@ tags:
 header:
   image: assets/images/3/0.png
   caption: "Credit by **Tom Preston-Werner**"
+  teaser: assets/images/3/0_.png
 toc: true
 excerpt_separator: <!--more-->
 ---

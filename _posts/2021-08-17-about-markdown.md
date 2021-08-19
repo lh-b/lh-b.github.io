@@ -8,6 +8,7 @@ tags:
 header:
   image: assets/images/4/0.jpg
   caption: "Credit by **John Gruber**"
+  teaser: assets/images/4/0_.jpg
 toc: true
 excerpt_separator: <!--more-->
 ---
