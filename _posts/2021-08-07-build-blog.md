@@ -23,7 +23,7 @@ excerpt_separator: <!--more-->
 
 {% include video id="2MsN8gpT6jY" provider="youtube" %}
 
-GitHub Pages가 무엇인지 이해하기 앞서 GitHub가 무엇인지 궁금했다.
+GitHub Pages가 무엇인지 이해하기 앞서 GitHub란 무엇인지 궁금하여 검색을 통해 알아보았다.
 GitHub는 버전 관리와 협업을 위한 코드 호스팅 플랫폼이다.
 버전 관리는 버전 관리 시스템(*Version Control System 이하 VCS*)에서 파일에 변화를 시간에 따라 기록하고 특정 버전의 파일을 가져올 수 있는 기능이다.
 VCS로 관리되는 형상(*소스 코드, 문서, 이미지 등*)을 클라우드 저장소에 담고 있어 사용자간에 협업이 용이할 수 있게 제공된다.
