@@ -10,6 +10,7 @@ header:
   caption: "Credit by **John Gruber**"
   teaser: assets/images/4/0_.jpg
 toc: true
+toc_sticky: true
 excerpt_separator: <!--more-->
 ---
 ---
@@ -19,12 +20,9 @@ excerpt_separator: <!--more-->
 일반 텍스트로 서식이 있는 문서를 작성하는데 사용되며, 일반 마크업 언어에 비해 문법이 쉽고 간단한 것이 특징이다.
 HTML과 리치 텍스트(*RTF*) 등 서식 문서로 쉽게 변환되기 때문에 온라인 콘텐츠 등에서 `.md` 또는 `.markdown` 확장자로 사용한다.
 
-
-## Markdown 문법
-
 Jekyll에서 지원하는 Markdown 문법의 요소는 다음과 같다.
 
-#### 제목
+### 제목
 
 Markdown|HTML|출력
 ---|---|---
@@ -35,7 +33,7 @@ Markdown|HTML|출력
 ##### Heading level 5|<h5>Heading level 5</h5>|<span style="font-weight:bold;font-size:1.36em;">Heading level 5</span>
 ###### Heading level 6|<h6>Heading level 6</h6>|<span style="font-weight:bold;font-size:1.3em;">Heading level 6</span>
 
-#### 수평선
+### 수평선
 
 한줄에 3개 이상의 \*\*\*, \-\-\-, \_\_\_를 사용하여 수평선을 그린다.
 
@@ -47,13 +45,9 @@ Markdown|HTML|출력
 ___
 ```
 
-***
-
 ---
 
-___
-
-#### 단락
+### 단락
 
 빈 줄을 추가하거나 <p></p> 태그를 이용하여 단락을 구분한다.
 
@@ -67,7 +61,7 @@ I really like using Markdown.
 I think I'll use it to format all of my documents from now on.
 ```
 
-#### 줄 바꿈
+### 줄 바꿈
 
 두 개 이상의 띄어쓰기와 엔터(*enter*)를 입력하거나 \<br\> 태그를 이용하여 줄을 바꾼다.
 
@@ -80,7 +74,7 @@ This is the first line.
 And this is the second line.
 ```
 
-#### 강조
+### 강조
 
 텍스트 스타일을 굵게 또는 기울임꼴로 변경한다.
 
@@ -90,7 +84,7 @@ I love \*it\*.<br><small style="display:inline-block;width: 95%;text-align:cente
 I love \*\*it\*\*.<br><small style="display:inline-block;width: 95%;text-align:center;">또는</small><br>I love \_\_it\_\_.|I love \<strong\>it\</strong\>.|I love **it**.
 I love \*\*\*it\*\*\*.<br><small style="display:inline-block;width: 95%;text-align:center;">또는</small><br>I love \_\_\_it\_\_\_.|I love \<strong\>\<em\>it\</em\>\</strong\>.|I love ***it***.
 
-#### 취소선
+### 취소선
 
 단어 가운데에 수평선을 넣어 취소선을 표현하려면 \~\~를 단어의 앞 뒤에 사용한다.
 
@@ -100,7 +94,7 @@ I love \*\*\*it\*\*\*.<br><small style="display:inline-block;width: 95%;text-ali
 
 ~~The world is flat.~~ We now know that the world is round.
 
-#### 인용구
+### 인용구
 
 문장 앞에 >를 입력하여 인용구를 만든다.
 인용 부호는 중첩하여 사용할 수 있으며 다른 Markdown 요소와 동시에 사용이 가능하다.
@@ -115,7 +109,7 @@ I love \*\*\*it\*\*\*.<br><small style="display:inline-block;width: 95%;text-ali
 >> But we should not forget about prudence.
 ```
 
-> #### The quarterly results look great!
+> *** The quarterly results look great!***
 >
 > - Revenue was off the chart.
 > - Profits were higher than ever.
@@ -123,7 +117,7 @@ I love \*\*\*it\*\*\*.<br><small style="display:inline-block;width: 95%;text-ali
 > *Everything* is going according to **plan**.
 >> But we should not forget about prudence.
 
-#### 목록
+### 목록
 
 순서가 지정된 목록을 만드는 방법은 문장 앞에 숫자와 마침표를 입력한다.
 숫자는 1부터 입력해야 하며 다음 입력하는 숫자가 무엇이든 순서대로 목록이 지정된다.
@@ -138,7 +132,7 @@ Markdown|HTML|출력
 * First item<br>* Second item<br>* Third item<br>* Fourth item|<ol><br><li>First item</li><br><li>Second item</li><br><li>Third item</li><br><li>Fourth item</li><br></ol>|· First item<br>· Second item<br>· Third item<br>· Fourth item
 + First item<br>+ Second item<br>+ Third item<br>+ Fourth item|<ol><br><li>First item</li><br><li>Second item</li><br><li>Third item</li><br><li>Fourth item</li><br></ol>|· First item<br>· Second item<br>· Third item<br>· Fourth item
 
-#### 코드 블록
+### 블록
 
 블록의 모든 행을 최소 4개의 띄어쓰기 또는 하나의 탭만큼 들여쓰거나 <pre></pre> 태그를 이용하여 코드 블록을 생성한다.
 
@@ -147,10 +141,6 @@ Markdown|HTML|출력
         Code Block
     >
 ```
-
-    <
-        Code Block
-    >
 
 ```
 <pre>
@@ -217,7 +207,7 @@ public class OutputFunction
 }
 ```
 
-#### 코드
+### 코드
 
 단어나 구를 \`로 감싸 코드로 표현한다.
 
@@ -225,7 +215,7 @@ Markdown|HTML|출력
 ---|---|---
 At the command prompt, type \`nano\`.|At the command prompt, type \<code\>nano\</code\>.|At the command prompt, type `nano`.
 
-#### 링크
+### 링크
 
 링크 텍스트를 []로 묶고 바로 뒤에 URL을 ()로 묶는다.
 
@@ -235,7 +225,7 @@ My favorite search engine is [Google](https://google.com).
 
 My favorite search engine is [Google](https://google.com).
 
-##### 툴팁
+### 툴팁
 
 URL 뒤에 툴팁 정보를 ""로 감싸 넣는다.
 마우스를 링크 위로 가져가면 툴팁 정보가 나타난다.
@@ -246,7 +236,7 @@ My favorite search engine is [Google](https://google.com "The best search engine
 
 My favorite search engine is [Google](https://google.com "The best search engine for privacy").
 
-##### URL 및 Email 링크
+### URL 및 Email 링크
 
 URL이나 이메일 주소를 <>로 감싼다.
 
@@ -257,7 +247,7 @@ URL이나 이메일 주소를 <>로 감싼다.
 <https://google.com>  
 <no-reply@google.com>
 
-#### 이미지
+### 이미지
 
 먼저 !와 이미지 텍스트를 []로 묶고 바로 뒤에 URL을 ()로 묶는다.
 추가로 툴팁 정보를 나타내려면 URL 뒤에 툴팁 정보를 ""로 감싸 넣는다.
@@ -273,7 +263,7 @@ URL이나 이메일 주소를 <>로 감싼다.
 
 <img width="50%" src="../assets/images/4/1.jpg"/>
 
-#### 동영상
+### 동영상
 
 \<video\>\</video\> 태그나 \<iframe\>\</iframe\> 태그를 이용하여 크기 조절이 가능한 동영상을 추가한다.
 Liquid 태그가 지원되는 경우 `youtube`, `vimeo`, `google-drive`, `bilibili`에서 제공하는 동영상인 경우 아이디를 입력하여 동영상을 추가한다.
@@ -298,7 +288,7 @@ Liquid 태그가 지원되는 경우 `youtube`, `vimeo`, `google-drive`, `bilibi
 
 {% include video id="HUBNt18RFbo" provider="youtube" %}
 
-#### 이스케이프 문자
+### 이스케이프 문자
 
 텍스트 서식을 지정하는데 사용되는 리터럴 문자를 표시하려면 문자 앞에 \를 추가한다.
 이스케이프 문자가 적용되는 리터럴 문자 목록은 다음과 같다.
@@ -326,7 +316,7 @@ Liquid 태그가 지원되는 경우 `youtube`, `vimeo`, `google-drive`, `bilibi
 
 \* Without the backslash, this would be a bullet in an unordered list.
 
-#### 테이블
+### 테이블
 
 표를 추가하려면 \-\-\-을 사용하여 각 열의 헤더를 만들고 \|를 사용하여 각 열을 구분한다.
 행의 양쪽 끝에 |를 추가하여 호환성을 향상시킨다.
@@ -344,7 +334,7 @@ Liquid 태그가 지원되는 경우 `youtube`, `vimeo`, `google-drive`, `bilibi
 | Header      | Title       | Here's this   |
 | Paragraph   | Text        | And more      |
 
-#### 작업 목록
+### 작업 목록
 
 작업 목록을 사용하여 확인란이 있는 항목 목록을 만든다.
 작업 목록 항목 앞에 \-와 \[ \]를 공백으로 추가하고 빈 공백에 x를 입력하여 선택 항목을 지정한다.
@@ -359,7 +349,7 @@ Liquid 태그가 지원되는 경우 `youtube`, `vimeo`, `google-drive`, `bilibi
 - [ ] Update the website
 - [ ] Contact the media
 
-#### 각주
+### 각주
 
 각주를 사용하면 문서 본문을 복잡하게 만들지 않고 참조를 추가할 수 있다.
 각주를 생성할 때 각주 참조를 추가한 위치에 링크가 있는 위 첨자 번호가 나타나고 링크를 통해 페이지 하단의 각주 내용으로 이동이 가능하다.
