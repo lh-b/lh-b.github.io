@@ -20,6 +20,10 @@ excerpt_separator: <!--more-->
 일반 텍스트로 서식이 있는 문서를 작성하는데 사용되며, 일반 마크업 언어에 비해 문법이 쉽고 간단한 것이 특징이다.
 HTML과 리치 텍스트(*RTF*) 등 서식 문서로 쉽게 변환되기 때문에 온라인 콘텐츠 등에서 `.md` 또는 `.markdown` 확장자로 사용한다.
 
+**Tips**  
+온라인 마크다운 편집기 사이트를 방문하려면 [여기](https://pandao.github.io/editor.md/en.html){:target="_blank"}를 클릭한다.
+{: .notice--success}
+
 Jekyll에서 지원하는 Markdown 문법의 요소는 다음과 같다.
 
 ### 제목
