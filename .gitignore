@@ -1,6 +1,7 @@
 # Directory
 
 .jekyll-cache/*
+.dev-pages/*
 _site/*
 
 
