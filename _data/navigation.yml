@@ -1,6 +1,8 @@
 # main links
 main:
-  - title: "Tags"
+  - title: "Posts"
     url: /tags/
-  - title: "Collections"
-    url: /collection-archive/
+  - title: "Apps"
+    url: /apps/
+  - title: "Sites"
+    url: /sites/

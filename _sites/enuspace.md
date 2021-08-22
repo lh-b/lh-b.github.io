@@ -1,5 +1,5 @@
 ---
-permalink: /enuspace/
+permalink: /sites/enuspace/
 title: "enuSpace"
 tags:
   - solution

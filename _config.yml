@@ -114,7 +114,7 @@ author:
       url: "https://www.facebook.com/LHintime"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/lh-b"
+      # url: "https://github.com/lh-b"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
       # url: "https://instagram.com/"
@@ -127,7 +127,7 @@ footer:
       # url:
     - label: "Facebook"
       icon: "fab fa-fw fa-facebook-square"
-      url: "https://www.facebook.com/LHintime"
+      # url: "https://www.facebook.com/LHintime"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/lh-b"
@@ -154,6 +154,7 @@ exclude:
   - .bundle
   - .jekyll-assets-cache
   - .sass-cache
+  - .dev-pages
   - assets/js/plugins
   - assets/js/_main.js
   - assets/js/vendor
