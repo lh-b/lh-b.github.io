@@ -30,6 +30,9 @@ $global-font-family: $sans-serif !default;
 $header-font-family: $sans-serif !default;
 $caption-font-family: $serif !default;
 
+/* base scale */
+$base-size: 0.75em !default;
+
 /* type scale */
 $type-size-1: 2.441em !default; // ~39.056px
 $type-size-2: 1.953em !default; // ~31.248px
@@ -59,7 +62,7 @@ $light-gray: mix(#fff, $gray, 50%) !default;
 $lighter-gray: mix(#fff, $gray, 90%) !default;
 
 $background-color: #fff !default;
-$code-background-color: #e0e0e0 !default;
+$code-background-color: #efefef !default;
 $code-background-color-dark: $light-gray !default;
 $text-color: $dark-gray !default;
 $muted-text-color: mix(#fff, $text-color, 20%) !default;
@@ -71,7 +74,7 @@ $primary-color: #6f777d !default;
 $success-color: #3fa63f !default;
 $warning-color: #d67f05 !default;
 $danger-color: #ee5f5b !default;
-$info-color: #3b9cba !default;
+$info-color: #2396b9b7 !default;
 $focus-color: $primary-color !default;
 $active-color: mix(#fff, $primary-color, 80%) !default;
 
@@ -153,8 +156,8 @@ $max-width: $x-large !default;
    ========================================================================== */
 
 $right-sidebar-width-narrow: 200px !default;
-$right-sidebar-width: 300px !default;
-$right-sidebar-width-wide: 400px !default;
+$right-sidebar-width: 250px !default;
+$right-sidebar-width-wide: 300px !default;
 
 /*
    Other

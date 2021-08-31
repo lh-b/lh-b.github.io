@@ -113,7 +113,6 @@ body {
   p,
   li,
   dl {
-    font-size: 0.8em;
     font-weight: 300;
   }
 
@@ -132,7 +131,8 @@ body {
 
   a:not(.btn) {
     &:hover {
-      text-decoration: underline;
+      background-color: rgba(200,200,200,0.15);
+      transition: all .03s linear;
 
       img {
         box-shadow: 0 0 10px rgba(#000, 0.25);

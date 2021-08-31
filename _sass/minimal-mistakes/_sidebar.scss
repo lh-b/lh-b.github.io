@@ -28,11 +28,17 @@
     }
 
     &.sticky {
-      overflow-y: auto;
+      overflow: scroll;
       /* calculate height of nav list
          viewport height - nav height - masthead x-padding
       */
       max-height: calc(100vh - #{$nav-height} - 2em);
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    &.sticky::-webkit-scrollbar {
+      display: none;
     }
   }
 
@@ -73,7 +79,7 @@
 
 .sidebar__right {
   margin-bottom: 1em;
-
+  
   @include breakpoint($large) {
     position: absolute;
     top: 0;
@@ -92,8 +98,14 @@
 
       .toc {
         .toc__menu {
-          overflow-y: auto;
+          overflow: scroll;
           max-height: calc(100vh - 7em);
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        
+        .toc__menu::-webkit-scrollbar {
+          display: none;
         }
       }
     }
