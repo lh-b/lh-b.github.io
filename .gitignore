@@ -1,8 +1,9 @@
 # Directory
 
+.dev-pages/*
 .jekyll-cache/*
 _site/*
-dev-pages/*
+
 
 # File
 
