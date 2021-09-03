@@ -12,7 +12,7 @@ $indent-var: 1.3em !default;
 
 /* system typefaces */
 $serif: Georgia, Times, serif !default;
-$sans-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !default;
+$sans-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Sunflower', 'Helvetica Neue', sans-serif !default;
 $monospace: Monaco, Consolas, "Lucida Console", monospace !default;
 
 /* sans serif typefaces */
@@ -31,7 +31,7 @@ $header-font-family: $sans-serif !default;
 $caption-font-family: $serif !default;
 
 /* base scale */
-$base-size: 0.75em !default;
+$base-size: 0.8em !default;
 
 /* type scale */
 $type-size-1: 2.441em !default; // ~39.056px
