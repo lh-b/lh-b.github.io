@@ -1,10 +1,8 @@
 ---
 title: "Markdown에 대하여"
 tags:
-  - markdown
-  - language
-  - 마크다운
-  - 언어
+  - markdown language
+  - 마크다운 언어
 header:
   image: assets/images/4/0.jpg
   caption: "Credit by **John Gruber**"

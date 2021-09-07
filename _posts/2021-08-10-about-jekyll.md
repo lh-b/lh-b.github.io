@@ -2,7 +2,9 @@
 title: "Jekyll에 대하여"
 tags:
   - jekyll
+  - static site generator
   - 지킬
+  - 정적 사이트 생성기
 header:
   image: assets/images/3/0.png
   caption: "Credit by **Tom Preston-Werner**"
@@ -14,8 +16,8 @@ excerpt_separator: <!--more-->
 ---
 ## Jekyll
 
-Jekyll은 동적 객체 지향 스크립트 언어인 루비(*Ruby*) 기반으로 개발된 하나의 라이브러리 즉 루비젬(*RubyGem*)이다.
-루비는 인터프리터(*Interpreter*) 언어의 특성에 따라 C 또는 C++과 같은 컴파일러 언어에 비해 실행 속도가 느리지만 매번 HTML 태그를 작성하지 않고 콘텐츠에 초점을 맞춘 Markdown 언어로 작성하여 보다 쉽게 정적 웹사이트를 생성하는 편리한 도구이다.
+지킬(*Jekyll*)은 동적 객체 지향 스크립트 언어인 루비(*Ruby*) 기반으로 개발된 하나의 라이브러리 즉 루비젬(*RubyGem*)이다.
+루비는 인터프리터(*Interpreter*) 언어의 특성에 따라 C 또는 C++과 같은 컴파일러 언어에 비해 실행 속도가 느리지만 매번 HTML 태그를 작성하지 않고 콘텐츠에 초점을 맞춘 마크다운 언어(*Markdown Language*)로 작성하여 보다 쉽게 정적 웹사이트를 생성하는 편리한 도구이다.
 
 Markdown에 대한 내용은 [여기](../about-markdown)에서 확인할 수 있다.
 
@@ -324,4 +326,5 @@ Out-of-excerpt
 
 #### 초안
 
-초안이란 파일명에 날짜가 없는 포스트이다. 현재 작성중으로 아직은 게시하고 싶지 않은 포스트를 의미한다. 초안 기능을 사용하려면 `_drafts` 디렉토리 내 포스트를 작성한다.<!--more-->
+초안이란 파일명에 날짜가 없는 포스트이다. 현재 작성중으로 아직은 게시하고 싶지 않은 포스트를 의미한다. 초안 기능을 사용하려면 `_drafts` 디렉토리 내 포스트를 작성한다.
+<!--more-->
