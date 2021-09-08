@@ -115,6 +115,10 @@
     width: $right-sidebar-width;
     margin-right: -1 * $right-sidebar-width;
   }
+
+  a {
+    font-weight: 500;
+  }
 }
 
 .splash .sidebar__right {
