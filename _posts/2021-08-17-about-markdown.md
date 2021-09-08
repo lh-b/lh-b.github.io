@@ -3,9 +3,9 @@ title: "Markdown에 대하여"
 tags:
   - markdown language
 header:
-  image: assets/images/4/0.jpg
+  image: assets/images/4/0.png
   caption: "Credit by **John Gruber**"
-  teaser: assets/images/4/0_.jpg
+  teaser: assets/images/4/0_.png
 toc: true
 toc_sticky: true
 excerpt_separator: <!--more-->
