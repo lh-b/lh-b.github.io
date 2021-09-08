@@ -209,7 +209,7 @@ figure {
   display: -webkit-box;
   display: flex;
   -webkit-box-pack: justify;
-  justify-content: space-between;
+  justify-content: center;
   -webkit-box-align: start;
   align-items: flex-start;
   flex-wrap: wrap;
@@ -222,7 +222,6 @@ figure {
   }
 
   img {
-    width: 100%;
     border-radius: $border-radius;
     -webkit-transition: $global-transition;
     transition: $global-transition;
