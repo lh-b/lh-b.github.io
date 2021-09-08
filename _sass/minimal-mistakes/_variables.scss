@@ -31,22 +31,22 @@ $header-font-family: $sans-serif !default;
 $caption-font-family: $serif !default;
 
 /* type scale */
-$type-size-1: 2.441em !default; // ~39.056px
-$type-size-2: 1.953em !default; // ~31.248px
-$type-size-3: 1.563em !default; // ~25.008px
-$type-size-4: 1.25em !default; // ~20px
-$type-size-5: 1em !default; // ~16px
-$type-size-6: 0.75em !default; // ~12px
-$type-size-7: 0.6875em !default; // ~11px
-$type-size-8: 0.625em !default; // ~10px
+$type-size-1: 2.441em !default;
+$type-size-2: 1.953em !default;
+$type-size-3: 1.563em !default;
+$type-size-4: 1.25em !default;
+$type-size-5: 1em !default;
+$type-size-6: 0.915em !default;
+$type-size-7: 0.875em !default;
+$type-size-8: 0.8491em !default;
 
 /* headline scale */
-$h-size-1: 1.563em !default; // ~25.008px
-$h-size-2: 1.25em !default; // ~20px
-$h-size-3: 1.125em !default; // ~18px
-$h-size-4: 1.0625em !default; // ~17px
-$h-size-5: 1.03125em !default; // ~16.5px
-$h-size-6: 1em !default; // ~16px
+$h-size-1: 1.563em !default;
+$h-size-2: 1.3825em !default;
+$h-size-3: 1.255em !default;
+$h-size-4: 1.125em !default;
+$h-size-5: 1.0625em !default;
+$h-size-6: 1em !default;
 
 /*
    Colors
@@ -154,7 +154,6 @@ $max-width: $x-large !default;
 
 $right-sidebar-width-narrow: 200px !default;
 $right-sidebar-width: 250px !default;
-$right-sidebar-width-wide: 300px !default;
 
 /*
    Other
