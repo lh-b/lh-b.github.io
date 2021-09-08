@@ -7,7 +7,7 @@ title                    : "Thought Repository"
 title_separator          : "-"
 subtitle                 : "Record my thoughts" # site tagline that appears below site title in masthead
 name                     : "Huibo Ly"
-description              : "소프트웨어 개발 관련 지식에 대한 생각을 기록하는 블로그"
+description              : "애플리케이션 개발 관련 지식과 생각을 기록하는 저장소"
 url                      : "https://lh-b.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -96,7 +96,7 @@ analytics:
 author:
   name             : "Huibo Ly"
   avatar           : "/assets/images/profile/profile.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "응용 소프트웨어 개발자이며, IT 분야에서 홍익인간을 실현하고자 합니다."
+  bio              : "‘늦게 배운 도둑이 날 새는 줄 모른다’는 속담처럼 애플리케이션 개발은 늦깎이 개발자인 내게 끊임없는 도전과 성장할 수 있는 동기를 부여한다. #변화, #열정, #도전"
   location         : "South Korea"
   email            : "huiboly@gmail.com"
   links:
