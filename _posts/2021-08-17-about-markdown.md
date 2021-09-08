@@ -271,18 +271,18 @@ Liquid 태그가 지원되는 경우 `youtube`, `vimeo`, `google-drive`, `bilibi
 
 {% raw %}
 ```html
-<video width="500" height="375" controls>
+<video width="100%" height="100%" controls>
     <source src="/assets/images/4/2.mp4" type="video/mp4">
     Your browser does not support the video tag.
 </video>
 
-<iframe width="956" height="538" src="https://www.youtube.com/embed/HUBNt18RFbo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="100%" height="100%" src="https://www.youtube.com/embed/HUBNt18RFbo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 {% include video id="HUBNt18RFbo" provider="youtube" %}
 ```
 {% endraw %}
 
-<video width="500" height="375" controls>
+<video width="100%" height="100%" controls>
     <source src="/assets/images/4/2.mp4" type="video/mp4">
     Your browser does not support the video tag.
 </video>
