@@ -2,7 +2,6 @@
 title: "Markdown에 대하여"
 tags:
   - markdown language
-  - 마크다운 언어
 header:
   image: assets/images/4/0.jpg
   caption: "Credit by **John Gruber**"
@@ -256,14 +255,14 @@ URL이나 이메일 주소를 <>로 감싼다.
 또다른 방법으로 \<img/\> 또는 \<image/\> 태그를 이용하여 크기 조절이 가능한 이미지를 추가한다.
 
 ```html
-![image](../assets/images/4/1.jpg "Ocean Sunrise Dawn Peninsula France Landscape")
+![Photo Caption #1](/assets/images/4/1.jpg "Ocean Sunrise Dawn Peninsula France Landscape")
 
-<img width="50%" src="../assets/images/4/1.jpg"/>
+<img width="50%" src="/assets/images/4/1.jpg" alt="Photo Caption #2" title="Ocean Sunrise Dawn Peninsula France Landscape" />
 ```
 
-![image](../assets/images/4/1.jpg "Ocean Sunrise Dawn Peninsula France Landscape")
+![Photo Caption #1](/assets/images/4/1.jpg "Ocean Sunrise Dawn Peninsula France Landscape")
 
-<img width="50%" src="../assets/images/4/1.jpg"/>
+<img width="50%" src="/assets/images/4/1.jpg" alt="Photo Caption #2" title="Ocean Sunrise Dawn Peninsula France Landscape" />
 
 ### 동영상
 
@@ -273,7 +272,7 @@ Liquid 태그가 지원되는 경우 `youtube`, `vimeo`, `google-drive`, `bilibi
 {% raw %}
 ```html
 <video width="500" height="375" controls>
-    <source src="../assets/images/4/2.mp4" type="video/mp4">
+    <source src="/assets/images/4/2.mp4" type="video/mp4">
     Your browser does not support the video tag.
 </video>
 
@@ -284,7 +283,7 @@ Liquid 태그가 지원되는 경우 `youtube`, `vimeo`, `google-drive`, `bilibi
 {% endraw %}
 
 <video width="500" height="375" controls>
-    <source src="../assets/images/4/2.mp4" type="video/mp4">
+    <source src="/assets/images/4/2.mp4" type="video/mp4">
     Your browser does not support the video tag.
 </video>
 
