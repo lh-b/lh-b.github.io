@@ -210,7 +210,7 @@ figure {
   justify-content: center;
   align-items: flex-start;
   flex-wrap: wrap;
-  margin: 0;
+  margin: 20px 0;
 
   img,
   iframe,
@@ -238,7 +238,6 @@ figure {
 
     figcaption {
       width: 100%;
-      margin: 2em 0;
     }
   }
 
