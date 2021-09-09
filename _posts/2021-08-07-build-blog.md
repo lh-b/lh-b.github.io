@@ -1,9 +1,9 @@
 ---
 title: "개인 블로그 생성하기"
 tags:
-  - blog
-  - github pages
-  - jekyll
+  - Blog
+  - Github Pages
+  - Jekyll
 header:
   image: assets/images/2/0.png
   caption: "Credit by **GitHub. Inc.**"

@@ -1,8 +1,8 @@
 ---
 title: "Jekyll에 대하여"
 tags:
-  - jekyll
-  - static site generator
+  - Jekyll
+  - Static Site Generator
 header:
   image: assets/images/3/0.png
   caption: "Credit by **Tom Preston-Werner**"

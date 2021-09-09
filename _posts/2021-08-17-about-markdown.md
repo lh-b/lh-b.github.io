@@ -1,7 +1,7 @@
 ---
 title: "Markdown에 대하여"
 tags:
-  - markdown language
+  - Markdown Language
 header:
   image: assets/images/4/0.png
   caption: "Credit by **John Gruber**"
@@ -371,6 +371,8 @@ Here's a simple footnote,[^1] and here's a longer one.[^bignote]
 ```
 
 Here's a simple footnote,[^1] and here's a longer one.[^bignote]
+
+#### 참조
 
 [^1]: This is the first footnote.
 
