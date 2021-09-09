@@ -2,6 +2,9 @@
    jQuery plugin settings and other scripts
    ========================================================================== */
 
+if (navigator.userAgent.toLowerCase().indexOf("chrome") != -1)
+  chrome_options.add_argument('--log-level=1');
+
 $(document).ready(function () {
   // Image popups
   $('.page__content img').wrap(function () {
