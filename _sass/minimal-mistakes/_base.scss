@@ -141,6 +141,9 @@ a {
 }
 
 /* buttons */
+button {
+  display: inline-block;
+}
 
 button:focus {
   @extend %tab-focus;
