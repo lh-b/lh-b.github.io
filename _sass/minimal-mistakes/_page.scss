@@ -2,6 +2,8 @@
    SINGLE PAGE/POST
    ========================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap');
+
 #main {
   @include clearfix;
   margin-left: auto;
@@ -206,8 +208,16 @@ body {
       text-shadow: 1px 1px 4px rgba(#000, 0.5);
     }
 
+    .page__title,
     .page__lead {
-      max-width: $medium;
+      font-family: 'Nanum Brush Script', cursive;
+      font-size: 1.6em;
+    }
+
+    .character {
+      display: block;
+      text-align: right;
+      font-size: .9em;
     }
 
     .page__title {

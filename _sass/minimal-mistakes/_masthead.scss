@@ -2,6 +2,8 @@
    MASTHEAD
    ========================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Gugi&display=swap');
+
 .masthead {
   position: relative;
   border-bottom: 1px solid $border-color;
@@ -49,7 +51,8 @@
   display: flex;
   -ms-flex-item-align: center;
   align-self: center;
-  font-weight: bold;
+  font-family: 'Gugi', cursive;
+  font-weight: 300;
   // z-index: 20;
 }
 
