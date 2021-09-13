@@ -2,6 +2,7 @@
    SINGLE PAGE/POST
    ========================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Annie+Use+Your+Telescope&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap');
 
 #main {
@@ -208,10 +209,9 @@ body {
       text-shadow: 1px 1px 4px rgba(#000, 0.5);
     }
 
-    .page__title,
     .page__lead {
       font-family: 'Nanum Brush Script', cursive;
-      font-size: 1.6em;
+      font-size: 2em;
     }
 
     .character {
@@ -221,6 +221,7 @@ body {
     }
 
     .page__title {
+      font-family: 'Annie Use Your Telescope', cursive;
       font-size: $type-size-2;
 
       @include breakpoint($small) {

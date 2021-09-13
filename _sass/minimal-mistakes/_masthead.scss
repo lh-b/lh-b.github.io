@@ -2,6 +2,7 @@
    MASTHEAD
    ========================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Gugi&display=swap');
 
 .masthead {
@@ -51,14 +52,15 @@
   display: flex;
   -ms-flex-item-align: center;
   align-self: center;
-  font-family: 'Gugi', cursive;
-  font-weight: 300;
+  font-family: 'East Sea Dokdo', cursive;
+  font-size: $type-size-1;
+  line-height: .9;
   // z-index: 20;
 }
 
 .site-subtitle {
   display: block;
-  font-size: $type-size-8;
+  font-size: .7em;
 }
 
 .masthead__menu {
@@ -88,6 +90,7 @@
   display: block;
   list-style-type: none;
   white-space: nowrap;
+  font-family: 'Gugi', cursive;
 
   &--lg {
     padding-right: 2em;
