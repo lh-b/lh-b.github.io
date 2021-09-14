@@ -251,25 +251,24 @@ $mfp-use-visuallyhidden:              false !default; // Hide content from brows
 
 // CSS-reset for buttons
 button {
-  display: none;
-  //&.mfp-close,
-  //&.mfp-arrow {
-  //  overflow: visible;
-  //  cursor: pointer;
-  //  background: transparent;
-  //  border: 0;
-  //  -webkit-appearance: none;
-  //  display: block;
-  //  outline: none;
-  //  padding: 0;
-  //  z-index: $mfp-z-index-base + 6;
-  //  -webkit-box-shadow: none;
-  //  box-shadow: none;
-  //}
-  //&::-moz-focus-inner {
-  //    padding: 0;
-  //    border: 0
-  //}
+  &.mfp-close,
+  &.mfp-arrow {
+    overflow: visible;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    -webkit-appearance: none;
+    display: block;
+    outline: none;
+    padding: 0;
+    z-index: $mfp-z-index-base + 6;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+  &::-moz-focus-inner {
+      padding: 0;
+      border: 0
+  }
 }
 
 
@@ -325,91 +324,91 @@ button {
 }
 
 // Navigation arrows
-//@if $mfp-include-arrows {
-//  .mfp-arrow {
-//    position: absolute;
-//    opacity: $mfp-controls-opacity;
-//    @if $mfp-IE7support {
-//      filter: unquote("alpha(opacity=#{$mfp-controls-opacity*100})");
-//    }
-//    margin: 0;
-//    top: 50%;
-//    margin-top: -55px;
-//    padding: 0;
-//    width: 90px;
-//    height: 110px;
-//    -webkit-tap-highlight-color: rgba(0,0,0,0);
-//    &:active {
-//      margin-top: -54px;
-//    }
-//    &:hover,
-//    &:focus {
-//      opacity: 1;
-//      @if $mfp-IE7support {
-//        filter: unquote("alpha(opacity=#{1*100})");
-//      }
-//    }
-//    &:before,
-//    &:after,
-//    .mfp-b,
-//    .mfp-a {
-//      content: '';
-//      display: block;
-//      width: 0;
-//      height: 0;
-//      position: absolute;
-//      left: 0;
-//      top: 0;
-//      margin-top: 35px;
-//      margin-left: 35px;
-//      border: medium inset transparent;
-//    }
-//
-//    &:after,
-//    .mfp-a {
-//
-//      border-top-width: 13px;
-//      border-bottom-width: 13px;
-//      top:8px;
-//    }
-//
-//    &:before,
-//    .mfp-b {
-//      border-top-width: 21px;
-//      border-bottom-width: 21px;
-//      opacity: 0.7;
-//    }
-//
-//  }
-//
-//  .mfp-arrow-left {
-//    left: 0;
-//
-//    &:after,
-//    .mfp-a {
-//      border-right: 17px solid $mfp-controls-color;
-//      margin-left: 31px;
-//    }
-//    &:before,
-//    .mfp-b {
-//      margin-left: 25px;
-//      border-right: 27px solid $mfp-controls-border-color;
-//    }
-//  }
-//
-//  .mfp-arrow-right {
-//    right: 0;
-//    &:after,
-//    .mfp-a {
-//      border-left: 17px solid $mfp-controls-color;
-//      margin-left: 39px
-//    }
-//    &:before,
-//    .mfp-b {
-//      border-left: 27px solid $mfp-controls-border-color;
-//    }
-//  }
-//}
+@if $mfp-include-arrows {
+  .mfp-arrow {
+    position: absolute;
+    opacity: $mfp-controls-opacity;
+    @if $mfp-IE7support {
+      filter: unquote("alpha(opacity=#{$mfp-controls-opacity*100})");
+    }
+    margin: 0;
+    top: 50%;
+    margin-top: -55px;
+    padding: 0;
+    width: 90px;
+    height: 110px;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    &:active {
+      margin-top: -54px;
+    }
+    &:hover,
+    &:focus {
+      opacity: 1;
+      @if $mfp-IE7support {
+        filter: unquote("alpha(opacity=#{1*100})");
+      }
+    }
+    &:before,
+    &:after,
+    .mfp-b,
+    .mfp-a {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      position: absolute;
+      left: 0;
+      top: 0;
+      margin-top: 35px;
+      margin-left: 35px;
+      border: medium inset transparent;
+    }
+
+    &:after,
+    .mfp-a {
+
+      border-top-width: 13px;
+      border-bottom-width: 13px;
+      top:8px;
+    }
+
+    &:before,
+    .mfp-b {
+      border-top-width: 21px;
+      border-bottom-width: 21px;
+      opacity: 0.7;
+    }
+
+  }
+
+  .mfp-arrow-left {
+    left: 0;
+
+    &:after,
+    .mfp-a {
+      border-right: 17px solid $mfp-controls-color;
+      margin-left: 31px;
+    }
+    &:before,
+    .mfp-b {
+      margin-left: 25px;
+      border-right: 27px solid $mfp-controls-border-color;
+    }
+  }
+
+  .mfp-arrow-right {
+    right: 0;
+    &:after,
+    .mfp-a {
+      border-left: 17px solid $mfp-controls-color;
+      margin-left: 39px
+    }
+    &:before,
+    .mfp-b {
+      border-left: 27px solid $mfp-controls-border-color;
+    }
+  }
+}
 
 
 
@@ -610,8 +609,6 @@ button {
   }
 }
 
-
-
 // IE7 support
 // Styles that make popup look nicier in old IE
 @if $mfp-IE7support {
@@ -667,7 +664,6 @@ button {
   
   /* animate out */
   &.mfp-removing {
-    
     .mfp-with-anim {
       transform: scale(0.8); 
       opacity: 0;
@@ -675,7 +671,10 @@ button {
     &.mfp-bg {
       opacity: 0;
     }
-    
   }
-  
+}
+
+.mfp-close,
+.mfp-prevent-close {
+  visibility: hidden;
 }
