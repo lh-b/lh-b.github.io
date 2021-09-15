@@ -86,8 +86,7 @@ body {
 }
 
 .page__lead {
-  font-family: $global-font-family;
-  font-size: $type-size-4;
+  line-height: 1;
 }
 
 .page__content {
@@ -209,11 +208,6 @@ body {
       text-shadow: 1px 1px 4px rgba(#000, 0.5);
     }
 
-    .page__lead {
-      font-family: 'Nanum Brush Script', cursive;
-      font-size: 2em;
-    }
-
     .character {
       display: block;
       text-align: right;
@@ -223,10 +217,12 @@ body {
     .page__title {
       font-family: 'Annie Use Your Telescope', cursive;
       font-size: $type-size-2;
-
-      @include breakpoint($small) {
-        font-size: $type-size-1;
-      }
+    }
+    
+    .page__lead {
+      font-family: 'Nanum Brush Script', cursive;
+      font-size: $type-size-3;
+      line-height: 1;
     }
   }
 }

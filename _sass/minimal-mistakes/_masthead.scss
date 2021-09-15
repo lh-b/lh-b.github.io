@@ -53,7 +53,7 @@
   -ms-flex-item-align: center;
   align-self: center;
   font-family: 'East Sea Dokdo', cursive;
-  font-size: $type-size-1;
+  font-size: $type-size-3;
   line-height: .9;
   // z-index: 20;
 }
@@ -95,5 +95,9 @@
   &--lg {
     padding-right: 2em;
     font-weight: 700;
+  }
+
+  a {
+    font-size: $type-size-6;
   }
 }
