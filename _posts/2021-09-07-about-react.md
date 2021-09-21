@@ -1,7 +1,7 @@
 ---
-title: "React에 대하여"
+title: "React.js에 대하여"
 tags:
-  - React
+  - React.js
   - JSX
   - UI
 header:
@@ -28,7 +28,7 @@ excerpt_separator: <!--more-->
 
 ## React.js
 
-리엑트.JS(*React.js*)는 자바스크립트(*Javascript*) 라이브러리의 하나로서 사용자 인터페이스[^1](*User Interface:UI*)를 만들기 위해 사용된다.
+리엑트.제이에스(*React.js*)는 자바스크립트(*Javascript*) 라이브러리의 하나로서 사용자 인터페이스[^1](*User Interface:UI*)를 만들기 위해 사용된다.
 React.js의 특징으로 선언형 프로그래밍[^2](*Declarative Programming*)을 제공하여 복잡한 UI를 만들 때 생기는 어려움을 줄여준다.
 또한 싱글 페이지 애플리케이션(Single Page Application:SPA)이나 모바일 애플리케이션 개발에 사용된다.
 다중 페이지를 개발하고자 할 때는 추가 라이브러리인 *React Router*를 활용하여 사용이 가능하다.
