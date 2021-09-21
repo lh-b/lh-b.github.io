@@ -24,15 +24,15 @@ excerpt_separator: <!--more-->
 그러나 Jekyll로 개발된 이 블로그는 정적 웹사이트이기 때문에 동적으로 데이터를 표현하는 에디터를 구현할 수 없었다.
 그래서 정적 웹사이트에서 동적 페이지를 구현할 순 없는지 다시 구글링을 시작했다.
 
-그리고 찾은 답은 바로 ***React***였다.
+그리고 찾은 답은 React.js였다.
 
-## React
+## React.js
 
-리엑트(*React*)는 자바스크립트(*Javascript*) 라이브러리의 하나로서 사용자 인터페이스[^1](*User Interface:UI*)를 만들기 위해 사용된다.
-React의 특징으로 선언형 프로그래밍[^2](*Declarative Programming*)을 제공하여 복잡한 UI를 만들 때 생기는 어려움을 줄여준다.
+리엑트.JS(*React.js*)는 자바스크립트(*Javascript*) 라이브러리의 하나로서 사용자 인터페이스[^1](*User Interface:UI*)를 만들기 위해 사용된다.
+React.js의 특징으로 선언형 프로그래밍[^2](*Declarative Programming*)을 제공하여 복잡한 UI를 만들 때 생기는 어려움을 줄여준다.
 또한 싱글 페이지 애플리케이션(Single Page Application:SPA)이나 모바일 애플리케이션 개발에 사용된다.
 다중 페이지를 개발하고자 할 때는 추가 라이브러리인 *React Router*를 활용하여 사용이 가능하다.
-React의 동작 방식은 다음과 같이 효율적으로 데이터 갱신(*Refresh*) 및 컴포넌트 렌더링(*Rendering*)을 수행한다.
+React.js의 동작 방식은 다음과 같이 효율적으로 데이터 갱신(*Refresh*) 및 컴포넌트 렌더링(*Rendering*)을 수행한다.
 
 1. JSX(*Javascript eXtension*)와 CSS(*Cascading Style Sheets*)로 애플리케이션의 각 상태에 대한 뷰 설계.
 2. 가상 DOM(*Virtual Document Object Model:Virtual DOM*)을 업데이트하고 프레임워크에서 이전 Virtual DOM과 현재 Virtual DOM 간의 데이터가 변경되는 부분 검출.
@@ -40,8 +40,8 @@ React의 동작 방식은 다음과 같이 효율적으로 데이터 갱신(*Ref
 
 #### JSX
 
-React는 Javascript와 JSX를 지원한다.
-HTML을 Javascript 문법으로 표현이 가능하지만 React에서는 Javascript 확장 문법인 JSX를 권장한다.
+React.js는 Javascript와 JSX를 지원한다.
+HTML을 Javascript 문법으로 표현이 가능하지만 React.js에서는 Javascript 확장 문법인 JSX를 권장한다.
 아래의 두 코드를 비교하여 JSX의 장점을 확인할 수 있다.
 
 ```javascript
