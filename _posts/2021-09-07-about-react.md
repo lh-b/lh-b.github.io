@@ -114,25 +114,15 @@ JSX를 컴파일한 Javascript 코드를 확인하려면 [여기](https://babelj
 
 1. `Node.JS` 와 `VS Code`를 설치한다.
 2. `window` + `R` 키를 누르고 `cmd`를 입력하여 명령 프롬프트를 실행한다.
-
 ![](/assets/images/5/1.jpg)
-
 3. 원하는 경로에서 `npx create-react-app 폴더명`을 입력한뒤 `Enter` 키를 누른다.
-
 ![](/assets/images/5/2.jpg)
-
 4. 다운로드가 완료되면 위와 같이 폴더명 내 React 관련 데이터를 확인할 수 있다.
-
 ![](/assets/images/5/3.jpg)
-
 5. `VS Code`를 실행한 뒤 `폴더 열기`를 눌러 입력한 폴더(*ex: react_projects*)를 선택한다.
-
 ![](/assets/images/5/4.jpg)
-
 6. `ctrl` + \` 키를 눌러 터미널을 활성화하고 `npm start`를 입력한다.
-
 ![](/assets/images/5/5.jpg)
-
 7. 위와 같이 브라우저에 React 로고가 보이면 React를 사용하기 위한 환경 구성이 완료된다.
 
 <!--more-->
