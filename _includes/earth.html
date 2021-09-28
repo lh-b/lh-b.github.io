@@ -24,7 +24,8 @@
         hexPolygonColor={() => `#${Math.round(Math.random() * Math.pow(2, 24)).toString(16).padStart(6, '0')}`}
         hexPolygonLabel={({ properties: d }) => `
           <b>${d.ADMIN} (${d.ISO_A2})</b> <br />
-          Population: <i>${d.POP_EST}</i>
+          인구수: <i>${d.POP_EST.toLocaleString(navigator.language)}명(${d.POP_YEAR})</i><br>
+          인구순위: <i>${d.POP_RANK}</i><br>
         `}
       />
     )
