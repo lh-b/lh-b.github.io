@@ -2,7 +2,6 @@
    SINGLE PAGE/POST
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Annie+Use+Your+Telescope&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap');
 
 #main {
@@ -177,7 +176,7 @@ body {
   &--overlay {
     position: relative;
     margin-bottom: 2em;
-    padding: 3em 0;
+    padding: 1em 0;
     @include clearfix;
     background-size: cover;
     background-repeat: no-repeat;
@@ -205,24 +204,25 @@ body {
     .page__lead,
     .btn {
       color: #fff;
-      text-shadow: 1px 1px 4px rgba(#000, 0.5);
+      text-shadow: 5px 5px 5px rgba(#000, 0.8);
     }
 
     .character {
       display: block;
       text-align: right;
-      font-size: .9em;
+      margin-top: 30px;
+      font-size: .8em;
     }
 
     .page__title {
-      font-family: 'Annie Use Your Telescope', cursive;
-      font-size: $type-size-2;
+      display: none;
     }
     
     .page__lead {
+      text-align: center;
       font-family: 'Nanum Brush Script', cursive;
-      font-size: $type-size-3;
-      line-height: 1;
+      font-size: $type-size-2;
+      line-height: 1.1;
     }
   }
 }
