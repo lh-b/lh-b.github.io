@@ -570,3 +570,12 @@ body {
     }
   }
 }
+
+.earth {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  overflow: hidden;
+  max-height: 400px;
+  border-radius: 20px;
+}
