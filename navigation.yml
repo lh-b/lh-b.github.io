@@ -1,0 +1,8 @@
+# main links
+main:
+  - title: "Posts"
+    url: /tags/
+  - title: "Apps"
+    url: /apps/
+  - title: "Sites"
+    url: /sites/
