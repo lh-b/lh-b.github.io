@@ -1,7 +1,7 @@
 # main links
 main:
   - title: "Posts"
-    url: /tags/
+    url: /tags-archive/
   - title: "Apps"
     url: /apps/
   - title: "Sites"
