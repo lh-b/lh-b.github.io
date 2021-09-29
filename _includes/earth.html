@@ -4,6 +4,13 @@
 
 <script type="text/jsx">
   const { useState, useEffect } = React;
+  const globeMaterial = new THREE.MeshPhongMaterial();
+    globeMaterial.bumpScale = 10;
+    new THREE.TextureLoader().load('//unpkg.com/three-globe/example/img/earth-water.png', texture => {
+      globeMaterial.specularMap = texture;
+      globeMaterial.specular = new THREE.Color('grey');
+      globeMaterial.shininess = 15;
+    });
 
   const World = () => {
     const [countries, setCountries] = useState({ features: []});
@@ -16,13 +23,13 @@
       <Globe
         width={1280}
         height={800}
+        globeMaterial={globeMaterial}
         globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
         bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
         backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
         hexPolygonsData={countries.features}
-        hexPolygonResolution={3}
-        hexPolygonMargin={0.01}
-        hexPolygonColor={() => `#${Math.round(Math.random() * Math.pow(2,24)).toString(16).padStart(6,'0')}6e`}
+        hexPolygonColor={() => `#${Math.round(Math.random() * Math.pow(2,24)).toString(16).padStart(6,'0')}0e`}
+        hexPolygonMargin={0.001}
         hexPolygonLabel={({ properties: d }) => `
           <b>${d.ADMIN} (${d.ISO_A2})</b> <br>
           인구수: <i>${d.POP_EST.toLocaleString(navigator.language)}명 (${d.POP_YEAR})</i> <br>
@@ -44,5 +51,5 @@
 <script src="//unpkg.com/react/umd/react.production.min.js"></script>
 <script src="//unpkg.com/react-dom/umd/react-dom.production.min.js"></script>
 <script src="//unpkg.com/babel-standalone"></script>
-
+<script src="//unpkg.com/three"></script>
 <script src="//unpkg.com/react-globe.gl"></script>
