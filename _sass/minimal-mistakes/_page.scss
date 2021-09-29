@@ -577,11 +577,7 @@ body {
   overflow: hidden;
   width: 100%;
   max-height: 400px;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  border-collapse: separate;
+  border-radius: 20px;
 }
 
 .earth .scene-tooltip:not(:empty) {
