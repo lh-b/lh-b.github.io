@@ -1,4 +1,6 @@
+<h2 class="earth__title">지구</h2>
 <div id="globeViz" class="earth"></div>
+<small class="earth__caption">나라별 인구수(2021) / 1인당 국민소득(2021)</small>
 
 <script type="text/jsx">
   const { useState, useEffect } = React;
@@ -23,8 +25,10 @@
         hexPolygonColor={() => `#${Math.round(Math.random() * Math.pow(2,24)).toString(16).padStart(6,'0')}6e`}
         hexPolygonLabel={({ properties: d }) => `
           <b>${d.ADMIN} (${d.ISO_A2})</b> <br>
-          인구수: <i>${d.POP_EST.toLocaleString(navigator.language)} (${d.POP_YEAR})</i> <br>
-          인구순위: <i>${d.POP_RANK}</i> <br>
+          인구수: <i>${d.POP_EST.toLocaleString(navigator.language)}명 (${d.POP_YEAR})</i> <br>
+          인구 순위: <i>${d.POP_RANK}</i> <br>
+          1인당 GDP(nominal): <i>\$${d.GDP_NOMINAL_EST.toLocaleString(navigator.language)} (${d.GDP_NOMINAL_YEAR})</i> <br>
+          1인당 GDP(PPP): <i>\$${d.GDP_PPP_EST.toLocaleString(navigator.language)} (${d.GDP_PPP_YEAR})</i> <br>
         `}
       />
     )
