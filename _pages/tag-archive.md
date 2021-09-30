@@ -1,5 +1,5 @@
 ---
-title: posts
+title: Posts
 permalink: /tags/
 layout: tags
 classes: wide
