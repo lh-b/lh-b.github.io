@@ -50,6 +50,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
 
+  a {
+    text-decoration: none;
+  }
+
   a[rel="permalink"]::before {
     content: '';
     position: absolute;
@@ -74,7 +78,10 @@
 
 .archive__item-excerpt {
   margin-top: 0;
+  max-height: 4.5em;
   font-size: $type-size-6;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   & + p {
     text-indent: 0;
