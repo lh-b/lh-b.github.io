@@ -6,4 +6,4 @@ classes: wide
 entries_layout: grid
 ---
 
-by [*Tag*](../tags) \| [***Year***](../year)
+[Tag](../tags){: .btn .btn--inverse} [Year](../year){: .btn .btn--primary}
