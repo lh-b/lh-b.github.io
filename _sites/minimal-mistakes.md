@@ -9,6 +9,7 @@ tags:
 header:
   image: assets/images/sites/minimal-mistakes.png
   caption: "Photo credit by **Michael Rose**"
+  teaser: assets/images/sites/minimal-mistakes_.png
 ---
 ---
 Minimal Mistakes는 개인 사이트, 블로그 및 포트폴리오 구축에 적합한 Jekyll 테마 중 유연한 2열 테마이다.
