@@ -6,8 +6,13 @@
 .earth {
   display: flex;
   justify-content: center;
+  overflow: hidden;
   margin-top: 1em;
   margin-bottom: 5em;
+  border-radius: 20px;
+}
+
+.earth canvas {
   border-radius: 20px;
 }
 
