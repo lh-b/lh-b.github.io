@@ -1,7 +1,8 @@
 ---
 title: apps
-layout: collection
 permalink: /apps/
+layout: collection
 collection: apps
-entries_layout: list
+classes: wide
+entries_layout: grid
 ---

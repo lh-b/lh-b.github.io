@@ -442,7 +442,7 @@
    Wide Pages
    ========================================================================== */
 
-  .wide {
+.wide {
   .archive {
     @include breakpoint($large) {
       padding-right: 0;
@@ -451,6 +451,17 @@
     @include breakpoint($x-large) {
       padding-right: 0;
     }
+  }
+}
+
+/*
+   main Pages
+   ========================================================================== */
+
+.main {
+  .archive {
+    width: 100%;
+    padding: 0 5vw;
   }
 }
 

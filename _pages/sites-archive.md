@@ -1,7 +1,8 @@
 ---
 title: sites
-layout: collection
 permalink: /sites/
 collection: sites
-entries_layout: list
+layout: collection
+classes: wide
+entries_layout: grid
 ---
