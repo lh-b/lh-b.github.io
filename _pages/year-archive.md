@@ -1,5 +1,5 @@
 ---
-title: posts
+title: Posts
 permalink: /year/
 layout: posts
 classes: wide
