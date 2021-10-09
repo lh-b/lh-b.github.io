@@ -3,11 +3,11 @@ minimal_mistakes_skin    : # "air", "aqua", "contrast", "dark", "dirt", "neon", 
 
 # Site Settings
 locale                   : "ko-KR"
-title                    : "Thought Repository"
+title                    : "생각 저장소"
 title_separator          : "-"
 subtitle                 : "Record my thoughts" # site tagline that appears below site title in masthead
 name                     : "Huibo Ly"
-description              : "애플리케이션 개발 관련 지식과 생각을 기록하는 저장소"
+description              : "앱/웹 개발에 대한 기술 지식과 생각을 기록하는 공간"
 url                      : "https://lh-b.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "lh-b/lh-b.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
