@@ -1,6 +1,6 @@
 ---
 permalink: /sites/minimal-mistakes/
-title: "Minimal Mistakes"
+title: Minimal Mistakes
 tags:
   - jekyll
   - theme
@@ -8,7 +8,7 @@ tags:
   - mistakes
 header:
   image: assets/images/sites/minimal-mistakes.png
-  caption: "Photo credit by **Michael Rose**"
+  caption: Photo credit by **Michael Rose**
   teaser: assets/images/sites/minimal-mistakes_.png
 ---
 ---

@@ -1,12 +1,12 @@
 ---
-title: "React.js에 대하여"
+title: React.js에 대하여
 tags:
   - React.js
   - JSX
   - UI
 header:
   image: assets/images/5/0.png
-  caption: "Credit by **Jordan Walke**"
+  caption: Credit by **Jordan Walke**
   teaser: assets/images/5/0_.png
 toc: true
 toc_sticky: true

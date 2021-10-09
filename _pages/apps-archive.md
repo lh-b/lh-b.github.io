@@ -1,5 +1,5 @@
 ---
-title: apps
+title: Apps
 permalink: /apps/
 layout: collection
 collection: apps

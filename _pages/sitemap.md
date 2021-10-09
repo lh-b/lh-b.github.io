@@ -1,5 +1,5 @@
 ---
-title: sitemap
+title: Sitemap
 layout: archive
 permalink: /sitemap/
 author_profile: false

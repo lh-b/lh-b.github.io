@@ -1,11 +1,11 @@
 ---
-title: "Jekyll에 대하여"
+title: Jekyll에 대하여
 tags:
   - Jekyll
   - Static Site Generator
 header:
   image: assets/images/3/0.png
-  caption: "Credit by **Tom Preston-Werner**"
+  caption: Credit by **Tom Preston-Werner**
   teaser: assets/images/3/0_.png
 toc: true
 toc_sticky: true
@@ -218,7 +218,7 @@ page1.md      # -> http://example.com/test1/test2/test3/page1.html
 ```md
 ---
 layout: post
-title: "Hello World!"
+title: Hello World!
 ---
 
 # Welcome

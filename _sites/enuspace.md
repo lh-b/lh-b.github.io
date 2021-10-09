@@ -1,6 +1,6 @@
 ---
 permalink: /sites/enuspace/
-title: "enuSpace"
+title: Enuspace
 tags:
   - solution
   - editor
@@ -10,7 +10,7 @@ tags:
   - enuspace
 header:
   image: assets/images/sites/enuspace.png
-  caption: "Photo credit by **Expansion & Universal Co., Ltd**"
+  caption: Photo credit by **Expansion & Universal Co., Ltd**
   teaser: assets/images/sites/enuspace_.png
 ---
 ---

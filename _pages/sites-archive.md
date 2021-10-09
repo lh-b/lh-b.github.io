@@ -1,5 +1,5 @@
 ---
-title: sites
+title: Sites
 permalink: /sites/
 collection: sites
 layout: collection
