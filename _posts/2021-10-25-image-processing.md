@@ -3637,7 +3637,7 @@ plt.show()
   - 이것을 바탕으로 고주파를 제거하면 Blur 처리가 되며, 저주파를 제거하면 대상의 영역을 확인 가능
 - Low-pass filter(LPF)와 High-pass filter(HPF)를 이용하여, LPF를 적용하면 노이즈제거나 blur 처리를 할 수 있으며, HPF를 적용하면 경계선을 찾을 수 있음
 - 일반적으로 많이 사용되는 필터
-- $ ex) K = \frac{1}{25}\begin{vmatrix}1&1&1&1&1\\1&1&1&1&1\\1&1&1&1&1\\1&1&1&1&1\\1&1&1&1&1\\ \end{vmatrix} $
+- ex) $ K = \frac{1}{25}\begin{vmatrix}1&1&1&1&1\\1&1&1&1&1\\1&1&1&1&1\\1&1&1&1&1\\1&1&1&1&1\\ \end{vmatrix} $
 
 
 
@@ -3806,7 +3806,7 @@ plt.show()
   - Parameters
     - `src` : Chennel 수는 상관없으나, depth(Data Type)은 CV_8U, CV_16U, CV_16S, CV_32F or CV_64F
     - `ksize` : kernel 사이즈(ex; (3,3))
-  - $ ex) K = \frac{1}{9}\begin{vmatrix}1&1&1\\1&1&1\\1&1&1\\ \end{vmatrix} $
+  - ex) $ K = \frac{1}{9}\begin{vmatrix}1&1&1\\1&1&1\\1&1&1\\ \end{vmatrix} $
   - 이미지의 Data Type
 
 
