@@ -2989,8 +2989,6 @@ plt.show()
 #### 비트 연산 예시
 
 - 이미지에 OpenCV 로고 넣기
-- bk.jpg (https://cdn.pixabay.com/photo/2018/08/14/13/23/ocean-3605547_960_720.jpg)
-- logo.jpg (https://gaussian37.github.io/assets/img/vision/opencv/opencv.png)
 
 
 ```python
