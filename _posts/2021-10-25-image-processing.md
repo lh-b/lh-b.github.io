@@ -13,6 +13,8 @@ toc_sticky: true
 excerpt_separator: <!--more-->
 ---
 ---
+## 영상처리(Image Processing)
+
 - 입력 받은 영상을 사용 목적에 맞게 적절하게 처리하여 보다 개선된 영상을 생성하는 것
 - 입력 영상에 있는 잡음(noise) 제거, 영상의 대비(contrast) 개선, 관심영역(region of interest) 강조, 영역 분할(segmentation), 입축 및 저장 등
 - 저수준 영상 처리(좁은 의미의 영상 처리)
