@@ -88,11 +88,6 @@ body {
   float: right;
 }
 
-.page__lead {
-  margin-top: 3em;
-  line-height: 1;
-}
-
 .page__content {
   h2 {
     padding-bottom: 0.5em;
@@ -180,8 +175,8 @@ body {
 
   &--overlay {
     position: relative;
-    margin-bottom: 2em;
-    padding: 1em 0;
+    margin: 0;
+    padding: 0;
     @include clearfix;
     background-size: cover;
     background-repeat: no-repeat;
@@ -195,18 +190,8 @@ body {
       color: #fff;
     }
 
-    .wrapper {
-      padding-left: 1em;
-      padding-right: 1em;
-
-      @include breakpoint($x-large) {
-        max-width: $x-large;
-      }
-    }
-
     .page__title,
     .page__meta,
-    .page__lead,
     .btn {
       color: #fff;
       text-shadow: 5px 5px 5px rgba(#000, 0.8);
@@ -217,10 +202,13 @@ body {
     }
     
     .page__lead {
-      text-align: center;
-      font-family: 'Nanum Brush Script', cursive;
-      font-size: $type-size-2;
-      line-height: 1.1;
+      display: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    &::after {
+      display: none;
     }
   }
 }
