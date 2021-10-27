@@ -29,9 +29,11 @@ layout: default
           {% if page.title %}<h1 id="page-title" class="page__title p-name" itemprop="headline">
             <a href="{{ page.url | absolute_url }}" class="u-url" itemprop="url">{{ page.title | markdownify | remove: "<p>" | remove: "</p>" }}</a>
           </h1>{% endif %}
-          <a href="https://github.com/{{site.repository}}/edit/main/{{page.path}}" class="btn btn--inverse btn--small">수정</a>
-          <a href="https://github.com/{{site.repository}}/delete/main/{{page.path}}" class="btn btn--danger btn--small">삭제</a>
           {% include page__meta.html %}
+          <div class="page__button">
+            <a href="https://github.com/{{site.repository}}/edit/main/{{page.path}}" class="btn btn--inverse btn--small">수정</a>
+            <a href="https://github.com/{{site.repository}}/delete/main/{{page.path}}" class="btn btn--danger btn--small">삭제</a>
+          </div>
         </header>
       {% endunless %}
 
