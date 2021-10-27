@@ -80,8 +80,12 @@ body {
   }
 
   & + .page__meta {
-    margin-top: -0.5em;
+    margin-top: -0.1em;
   }
+}
+
+.page__button {
+  float: right;
 }
 
 .page__lead {
@@ -206,13 +210,6 @@ body {
     .btn {
       color: #fff;
       text-shadow: 5px 5px 5px rgba(#000, 0.8);
-    }
-
-    .character {
-      display: block;
-      text-align: right;
-      margin-top: 30px;
-      font-size: .8em;
     }
 
     .page__title {
