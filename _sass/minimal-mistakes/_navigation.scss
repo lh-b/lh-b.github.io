@@ -52,7 +52,8 @@
 
 .pagination {
   @include clearfix();
-  float: left;
+  display: block;
+  text-align: center;
   margin-top: 1em;
   padding-top: 1em;
   width: 100%;
@@ -65,12 +66,10 @@
   }
 
   li {
-    display: block;
-    float: left;
+    display: inline-block;
     margin-left: -1px;
 
     a {
-      display: block;
       margin-bottom: 0.25em;
       padding: 0.5em 1em;
       font-family: $sans-serif;
