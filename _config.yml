@@ -201,7 +201,7 @@ kramdown:
 # Collections
 collections:
   portfolio:
-    output: false
+    output: true
     permalink: /:collection/:path/
   sites:
     output: true
