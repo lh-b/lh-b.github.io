@@ -1,10 +1,9 @@
 # Directory
-
+.vs/*
 .dev-pages/*
 .jekyll-cache/*
 _site/*
 
 
 # File
-
 Gemfile.lock
