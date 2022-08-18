@@ -8,6 +8,7 @@ excerpt_separator: <!--more-->
 ## 방사선 전문 용어 및 약어 정리(Radiation Terms and Abbreviations)
 
 ### 방사선 전문 용어
+
 | 명칭 | 영문명 | 설명 |
 | :--- | :--- | :--- |
 | X-선 | X-Ray | 가시광선 보다 짧은 파장을 가진 침투 이온화 전자기 방사선. |
@@ -80,7 +81,9 @@ excerpt_separator: <!--more-->
 | 후방산란방사선 | Backscatter Radiation | 대상과 상호작용하고 후방으로 방향 전환한 X-선. |
 | 흡수선량 | Absorbed Dose | 조사 후 물질의 단위 질량당 전리 방사선으로부터 전달/누적된 에너지. rad 또는 gray로 표현됨. |
 
+
 ### 약어
+
 | 약어 | 영문명 | 설명 |
 | :--- | :--- | :--- |
 | **A** | Allergy | 알레르기내과 |
