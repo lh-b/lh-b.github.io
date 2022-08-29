@@ -100,7 +100,7 @@ excerpt_separator: <!--more-->
 | **DT** | Dentology | 치과 |
 | **ED** | Endocrinology | 내분비내과 |
 | **EM** | Emergency Medicine | 응급의학과 |
-| **ER**Emergency Room |  | 응급실 |
+| **ER** | Emergency Room | 응급실 |
 | **ENT & ORL** | Ear, Nose, Throat & oto rhino laryngology | 이비인후과 |
 | **FM** | Family medicine | 가정의학과 |
 | **GI** | Gastrointestinal Medicine | 소화기내과 |
