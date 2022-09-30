@@ -15,7 +15,6 @@ toc_sticky: true
 excerpt_separator: <!--more-->
 ---
 ---
-## 방사선 기술 요소(Technical Factors of Radiology)
 
 - 방사선 촬영 기술이란 무엇인가?
 - kVp가 방사선 영상에 어떤 영향을 미치는가?
