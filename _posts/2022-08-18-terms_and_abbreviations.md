@@ -1,5 +1,9 @@
 ---
 title: 방사선 전문 용어 및 약어 정리(Radiation Terms and Abbreviations)
+header:
+  image: assets/images/7/0.png
+  caption: Source from **glaciermedicaled.com**
+  teaser: assets/images/7/0_.png
 toc: true
 toc_sticky: true
 excerpt_separator: <!--more-->
