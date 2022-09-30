@@ -5,7 +5,6 @@ toc_sticky: true
 excerpt_separator: <!--more-->
 ---
 ---
-## 방사선 전문 용어 및 약어 정리(Radiation Terms and Abbreviations)
 
 ### 방사선 전문 용어
 
