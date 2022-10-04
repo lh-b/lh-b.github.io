@@ -6,8 +6,8 @@ locale                   : "ko-KR"
 title                    : "생각 저장소"
 title_separator          : "-"
 subtitle                 : "Record my thoughts" # site tagline that appears below site title in masthead
-name                     : "Huibo Ly"
-description              : "애플리케이션 개발에 대한 기술 지식과 생각을 기록하는 생각 "
+name                     : "Huiboly"
+description              : "다양한 기술 지식과 생각을 기록하는 공간"
 url                      : "https://lh-b.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "lh-b/lh-b.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -94,9 +94,9 @@ analytics:
 
 # Site Author
 author:
-  name             : "Huibo Ly"
+  name             : "Huiboly"
   avatar           : "/assets/images/profile/profile.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "애플리케이션 개발에 재미를 느끼며, 다양한 도전과 원하는 결과를 얻기위해 몰입하는 것을 좋아한다.<br>*#변화 #열정 #도전*"
+  bio              : "매일 세수하며 면도하듯이 또는 밥먹듯이 생명과 직결된 마음을 점검하는 시간은 얼마나 중요한가?<br>*#매일 #마음 #시간*"
   location         : "South Korea"
   email            : "huiboly@gmail.com"
   links:
