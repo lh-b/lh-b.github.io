@@ -1,9 +1,9 @@
 ---
 title: 방사선 전문 용어 및 약어 정리(Radiation Terms and Abbreviations)
 header:
-  image: assets/images/7/0.png
+  image: assets/images/8/0.png
   caption: Credit by **Huibo Ly**
-  teaser: assets/images/7/0_.png
+  teaser: assets/images/8/0_.png
 toc: true
 toc_sticky: true
 excerpt_separator: <!--more-->
