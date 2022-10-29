@@ -8,6 +8,7 @@ title_separator          : "-"
 subtitle                 : "Record my thoughts" # site tagline that appears below site title in masthead
 name                     : "Huiboly"
 description              : "다양한 기술 지식과 생각을 기록하는 공간"
+github                   : "https://github.com/lh-b"
 url                      : "https://lh-b.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "lh-b/lh-b.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -114,7 +115,7 @@ author:
       url: "https://www.facebook.com/LHintime"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      # url: "https://github.com/lh-b"
+      url: {site.github}
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
       # url: "https://instagram.com/"
@@ -130,7 +131,7 @@ footer:
       # url: "https://www.facebook.com/LHintime"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/lh-b"
+      url: {site.github}
     - label: "GitLab"
       icon: "fab fa-fw fa-gitlab"
       # url:

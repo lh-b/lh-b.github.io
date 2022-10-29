@@ -9,6 +9,6 @@ entries_layout: grid
 [년도](../year){: .btn .btn--inverse .btn--small}
 [태그](../tags){: .btn .btn--primary .btn--small}
 
-{% if site.comments.utterances.issue_term %}
+{% if $('#utterances-comments')[0].$('.avatar')[0].attr('href') == site.github %}
     [생성](https://github.com/{{site.repository}}/new/main/_posts){: .page__button .btn .btn--success .btn--small}
 {% endif %}
