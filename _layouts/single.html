@@ -30,12 +30,14 @@ layout: default
             <a href="{{ page.url | absolute_url }}" class="u-url" itemprop="url">{{ page.title | markdownify | remove: "<p>" | remove: "</p>" }}</a>
           </h1>{% endif %}
           {% include page__meta.html %}
+          {% raw %}
           {% if window.localStorage.getItem('utterances-session') != undefined %}
             <div class="page__button">
               <a href="https://github.com/{{site.comments.utterances.issue_term}}/edit/main/{{page.path}}" class="btn btn--inverse btn--small">수정</a>
               <a href="https://github.com/{{site.repository}}/delete/main/{{page.path}}" class="btn btn--danger btn--small">삭제</a>
             </div>
           {% endif %}
+          {% endraw %}
         </header>
       {% endunless %}
 
