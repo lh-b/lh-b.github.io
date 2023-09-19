@@ -1,0 +1,879 @@
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>개인 블로그 생성하기 - 생각 저장소</title>
+<meta name="description" content="개인 블로그를 운영하기 위한 첫걸음으로 블로그의 종류에 대하여 알아보니 네이버 블로그, 티스토리, Velog 등 여러 플랫폼이 존재했다. 블로그에 대한 지식과 경험이 없는 상태에서 무엇을 선택할지 고민하다가 자연스럽게 개발자스러운(배움의 길이 무궁무진한) 플랫폼인 깃허브 페이지(GitHub Pages)를 선택했다.  GitHub Pages  GitHub Pages가 무엇인지 이해하기 앞서 GitHub란 무엇인지 궁금하여 검색을 통해 알아보았다. GitHub는 버전 관리와 협업을 위한 코드 호스팅 플랫폼이다. 버전 관리는 버전 관리 시스템(Version Control System:VCS)에서 파일에 변화를 시간에 따라 기록하고 특정 버전의 파일을 가져올 수 있는 기능이다. VCS로 관리되는 형상(소스 코드, 문서, 이미지 등)을 클라우드 저장소에 담고 있어 사용자간에 협업이 용이할 수 있게 제공된다.  GitHub Pages는 GitHub의 기능 중 하나로 클라우드 저장소에 내용을 웹호스팅 서비스로 제공된다. 즉 자신이 개발한 웹페이지를 복잡한 웹서버를 구축하지 않고 서비스 할 수 있도록 도와주는 도구이다.  GitHub Pages 시작하기  1. GitHub 계정 생성하기    GitHub Pages는 GitHub 계정당 하나의 사이트가 제공된다. 계정이 없는 경우 계정당 하나의 이메일 인증으로 계정을 생성할 수 있다. 비밀번호는 숫자와 소문자를 포함한 8 ~ 15자 이내로 만들어야 한다.  2. 저장소 만들기      로그인 후 메인화면 좌측 상단에 Create repository 또는 New 버튼을 클릭한다.  이미 원하는 Jekyll 테마의 URL 정보를 취득한 경우 Import repository 버튼을 클릭 하고 여기를 눌러 다음 단계를 건너띈다.    Owner와 Repository name을 입력하고 Create repository 버튼을 눌러 저장소를 생성 한다. Owner와 Repository name 값을 동일하게 입력할 때 위와 같이 시크릿 메시지가 출력 되며 README.md에 내용이 자동으로 GitHub 메인 사이트와 연동된다.  3. Jekyll Theme 활용하기  Jekyll은 GitHub Pages에 대한 지원이 내장된 정적 웹사이트 생성기이다. GitHub 저장소 내 Markdown, HTML 등 파일을 정해진 규약으로 가져와 선택한 레이아웃을 기반으로 정적 웹사이트를 생성하는 도구이다. GitHub Pages에서 공식으로 지원하며 다양한 테마가 제공된다.  Jekyll에 대한 추가 내용은 여기에서 확인할 수 있다.     GitHub.com #jekyll-theme repos   jamstackthemes.dev   jekyllthemes.org   jekyllthemes.io   jekyll-themes.com   위 링크는 Jekyll 테마 웹사이트를 제공하는 사이트 목록이다. 링크에서 원하는 Jekyll 테마를 선택한다.    테마를 선택했다면 테마의 GitHub 사이트에 접속한다.  스크린샷의 테마를 사용하려면 여기를 클릭한다.    테마의 GitHub 메인 화면에서 Code 버튼을 클릭하여 URL 정보를 복사한다.  4. 개인 저장소에 테마 저장소 복사하기    저장소 만들기 단계에서 생성한 저장소 메인 화면에서 Import code 버튼을 클릭한다.    URL 정보 입력란에 복사한 URL 정보를 입력하고 Begin import 버튼을 클릭한다.    Jekyll 테마 저장소에 있는 데이터를 개인 저장소에 복사(Clone)할 때 작업 소요 시간은 테마 용량에 따라 다르다. 커피 한잔을 음미하며 차분히 기다린다.    복사 작업이 완료되면 개인 저장소 메인 화면 -&gt; 설정(Settings) 메뉴 -&gt; 페이지 서브 메뉴에서 소스(Source) 영역에 Branch: master와 같이 설정 후 저장한다. 위 웹페이지 주소를 통해 접속할 수 있으니 즐겨찾기나 README.md에 링크를 추가하여 매번 사이트 주소를 찾는 번거로움을 줄일 수 있다.    위와 같이 웹페이지에 테마가 적용 되었다면 GitHub 블로그 만들기에 첫 걸음을 내딛는 것이다.  다른 테마를 선택하여 위 절차를 진행하는데 테마가 제대로 적용이 안되는 경우, 해당 테마의 GitHub 사이트에 별도로 설정해야 하는 절차가 있는지 확인하여 추가 절차를 진행해야 한다.">
+
+
+  <meta name="author" content="Huiboly">
+  
+  <meta property="article:author" content="Huiboly">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="생각 저장소">
+<meta property="og:title" content="개인 블로그 생성하기">
+<meta property="og:url" content="http://localhost:4000/20210807/">
+
+
+  <meta property="og:description" content="개인 블로그를 운영하기 위한 첫걸음으로 블로그의 종류에 대하여 알아보니 네이버 블로그, 티스토리, Velog 등 여러 플랫폼이 존재했다. 블로그에 대한 지식과 경험이 없는 상태에서 무엇을 선택할지 고민하다가 자연스럽게 개발자스러운(배움의 길이 무궁무진한) 플랫폼인 깃허브 페이지(GitHub Pages)를 선택했다.  GitHub Pages  GitHub Pages가 무엇인지 이해하기 앞서 GitHub란 무엇인지 궁금하여 검색을 통해 알아보았다. GitHub는 버전 관리와 협업을 위한 코드 호스팅 플랫폼이다. 버전 관리는 버전 관리 시스템(Version Control System:VCS)에서 파일에 변화를 시간에 따라 기록하고 특정 버전의 파일을 가져올 수 있는 기능이다. VCS로 관리되는 형상(소스 코드, 문서, 이미지 등)을 클라우드 저장소에 담고 있어 사용자간에 협업이 용이할 수 있게 제공된다.  GitHub Pages는 GitHub의 기능 중 하나로 클라우드 저장소에 내용을 웹호스팅 서비스로 제공된다. 즉 자신이 개발한 웹페이지를 복잡한 웹서버를 구축하지 않고 서비스 할 수 있도록 도와주는 도구이다.  GitHub Pages 시작하기  1. GitHub 계정 생성하기    GitHub Pages는 GitHub 계정당 하나의 사이트가 제공된다. 계정이 없는 경우 계정당 하나의 이메일 인증으로 계정을 생성할 수 있다. 비밀번호는 숫자와 소문자를 포함한 8 ~ 15자 이내로 만들어야 한다.  2. 저장소 만들기      로그인 후 메인화면 좌측 상단에 Create repository 또는 New 버튼을 클릭한다.  이미 원하는 Jekyll 테마의 URL 정보를 취득한 경우 Import repository 버튼을 클릭 하고 여기를 눌러 다음 단계를 건너띈다.    Owner와 Repository name을 입력하고 Create repository 버튼을 눌러 저장소를 생성 한다. Owner와 Repository name 값을 동일하게 입력할 때 위와 같이 시크릿 메시지가 출력 되며 README.md에 내용이 자동으로 GitHub 메인 사이트와 연동된다.  3. Jekyll Theme 활용하기  Jekyll은 GitHub Pages에 대한 지원이 내장된 정적 웹사이트 생성기이다. GitHub 저장소 내 Markdown, HTML 등 파일을 정해진 규약으로 가져와 선택한 레이아웃을 기반으로 정적 웹사이트를 생성하는 도구이다. GitHub Pages에서 공식으로 지원하며 다양한 테마가 제공된다.  Jekyll에 대한 추가 내용은 여기에서 확인할 수 있다.     GitHub.com #jekyll-theme repos   jamstackthemes.dev   jekyllthemes.org   jekyllthemes.io   jekyll-themes.com   위 링크는 Jekyll 테마 웹사이트를 제공하는 사이트 목록이다. 링크에서 원하는 Jekyll 테마를 선택한다.    테마를 선택했다면 테마의 GitHub 사이트에 접속한다.  스크린샷의 테마를 사용하려면 여기를 클릭한다.    테마의 GitHub 메인 화면에서 Code 버튼을 클릭하여 URL 정보를 복사한다.  4. 개인 저장소에 테마 저장소 복사하기    저장소 만들기 단계에서 생성한 저장소 메인 화면에서 Import code 버튼을 클릭한다.    URL 정보 입력란에 복사한 URL 정보를 입력하고 Begin import 버튼을 클릭한다.    Jekyll 테마 저장소에 있는 데이터를 개인 저장소에 복사(Clone)할 때 작업 소요 시간은 테마 용량에 따라 다르다. 커피 한잔을 음미하며 차분히 기다린다.    복사 작업이 완료되면 개인 저장소 메인 화면 -&gt; 설정(Settings) 메뉴 -&gt; 페이지 서브 메뉴에서 소스(Source) 영역에 Branch: master와 같이 설정 후 저장한다. 위 웹페이지 주소를 통해 접속할 수 있으니 즐겨찾기나 README.md에 링크를 추가하여 매번 사이트 주소를 찾는 번거로움을 줄일 수 있다.    위와 같이 웹페이지에 테마가 적용 되었다면 GitHub 블로그 만들기에 첫 걸음을 내딛는 것이다.  다른 테마를 선택하여 위 절차를 진행하는데 테마가 제대로 적용이 안되는 경우, 해당 테마의 GitHub 사이트에 별도로 설정해야 하는 절차가 있는지 확인하여 추가 절차를 진행해야 한다.">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/20210807/0.png">
+
+
+
+
+
+  <meta property="article:published_time" content="2021-08-07T00:00:00+09:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/20210807/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Huiboly",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="생각 저장소 Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/assets/images/favicon/site.webmanifest">
+  <link rel="mask-icon" href="/assets/images/favicon/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+
+
+<meta name="google-site-verification" content="wA5C7RKX6xTV5yKCTDvE4PinamRPGPywjp_9oJDAR2Y" />
+
+<!-- jQuery 1.7.2+ or Zepto.js 1.0+ -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- jQuery Setting -->
+<script src="/assets/js/main.js"></script>
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single" oncontextmenu="return false">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          생각을 기록하다
+          <span class="site-subtitle">Record my thoughts</span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/year/">Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/apps/">Apps</a>
+            </li><li class="masthead__menu-item">
+              <a href="/sites/">Sites</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">토글 메뉴</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero"
+  style=" background-image: url('');"
+>
+  
+    <img src="/assets/images/20210807/0.png" alt="개인 블로그 생성하기" class="page__hero-image">
+  
+  
+    <span class="page__hero-caption">Credit by <em>GitHub. Inc.</em>
+</span>
+  
+</div>
+
+
+
+
+  
+    
+
+
+
+<nav class="breadcrumbs">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    
+    
+    
+      
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/" itemprop="item"><span itemprop="name">Home</span></a>
+
+          <meta itemprop="position" content="1" />
+        </li>
+        <span class="sep">/</span>
+      
+      
+        <li class="current">개인 블로그 생성하기</li>
+      
+    
+  </ol>
+</nav>
+
+  
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <img src="/assets/images/profile/profile.jpg" alt="Huiboly" itemprop="image" class="u-photo">
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="http://localhost:4000/" itemprop="url">Huiboly</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>매일 세수하며 면도하듯이 또는 밥먹듯이 생명과 직결된 마음을 점검하는 시간은 얼마나 중요한가?<br /><em>#매일 #마음 #시간</em></p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">팔로우</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name" class="p-locality">South Korea</span>
+        </li>
+      
+
+      
+        
+          
+        
+          
+        
+          
+        
+          
+            <li><a href="https://www.facebook.com/LHintime" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-facebook-square" aria-hidden="true"></i><span class="label">Facebook</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/lh-b" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+        
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:huiboly@gmail.com" rel="me" class="u-email">
+            <meta itemprop="email" content="huiboly@gmail.com" />
+            <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">이메일</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="개인 블로그 생성하기">
+    <meta itemprop="description" content="개인 블로그를 운영하기 위한 첫걸음으로 블로그의 종류에 대하여 알아보니 네이버 블로그, 티스토리, Velog 등 여러 플랫폼이 존재했다.블로그에 대한 지식과 경험이 없는 상태에서 무엇을 선택할지 고민하다가 자연스럽게 개발자스러운(배움의 길이 무궁무진한) 플랫폼인 깃허브 페이지(GitHub Pages)를 선택했다.GitHub PagesGitHub Pages가 무엇인지 이해하기 앞서 GitHub란 무엇인지 궁금하여 검색을 통해 알아보았다.GitHub는 버전 관리와 협업을 위한 코드 호스팅 플랫폼이다.버전 관리는 버전 관리 시스템(Version Control System:VCS)에서 파일에 변화를 시간에 따라 기록하고 특정 버전의 파일을 가져올 수 있는 기능이다.VCS로 관리되는 형상(소스 코드, 문서, 이미지 등)을 클라우드 저장소에 담고 있어 사용자간에 협업이 용이할 수 있게 제공된다.GitHub Pages는 GitHub의 기능 중 하나로 클라우드 저장소에 내용을 웹호스팅 서비스로 제공된다.즉 자신이 개발한 웹페이지를 복잡한 웹서버를 구축하지 않고 서비스 할 수 있도록 도와주는 도구이다.GitHub Pages 시작하기1. GitHub 계정 생성하기GitHub Pages는 GitHub 계정당 하나의 사이트가 제공된다.계정이 없는 경우 계정당 하나의 이메일 인증으로 계정을 생성할 수 있다.비밀번호는 숫자와 소문자를 포함한 8 ~ 15자 이내로 만들어야 한다.2. 저장소 만들기로그인 후 메인화면 좌측 상단에 Create repository 또는 New 버튼을 클릭한다.이미 원하는 Jekyll 테마의 URL 정보를 취득한 경우 Import repository 버튼을 클릭 하고 여기를 눌러 다음 단계를 건너띈다.Owner와 Repository name을 입력하고 Create repository 버튼을 눌러 저장소를 생성 한다.Owner와 Repository name 값을 동일하게 입력할 때 위와 같이 시크릿 메시지가 출력 되며 README.md에 내용이 자동으로 GitHub 메인 사이트와 연동된다.3. Jekyll Theme 활용하기Jekyll은 GitHub Pages에 대한 지원이 내장된 정적 웹사이트 생성기이다.GitHub 저장소 내 Markdown, HTML 등 파일을 정해진 규약으로 가져와 선택한 레이아웃을 기반으로 정적 웹사이트를 생성하는 도구이다.GitHub Pages에서 공식으로 지원하며 다양한 테마가 제공된다.Jekyll에 대한 추가 내용은 여기에서 확인할 수 있다.  GitHub.com #jekyll-theme repos  jamstackthemes.dev  jekyllthemes.org  jekyllthemes.io  jekyll-themes.com위 링크는 Jekyll 테마 웹사이트를 제공하는 사이트 목록이다.링크에서 원하는 Jekyll 테마를 선택한다.테마를 선택했다면 테마의 GitHub 사이트에 접속한다.스크린샷의 테마를 사용하려면 여기를 클릭한다.테마의 GitHub 메인 화면에서 Code 버튼을 클릭하여 URL 정보를 복사한다.4. 개인 저장소에 테마 저장소 복사하기저장소 만들기 단계에서 생성한 저장소 메인 화면에서 Import code 버튼을 클릭한다.URL 정보 입력란에 복사한 URL 정보를 입력하고 Begin import 버튼을 클릭한다.Jekyll 테마 저장소에 있는 데이터를 개인 저장소에 복사(Clone)할 때 작업 소요 시간은 테마 용량에 따라 다르다.커피 한잔을 음미하며 차분히 기다린다.복사 작업이 완료되면 개인 저장소 메인 화면 -&gt; 설정(Settings) 메뉴 -&gt; 페이지 서브 메뉴에서 소스(Source) 영역에 Branch: master와 같이 설정 후 저장한다.위 웹페이지 주소를 통해 접속할 수 있으니 즐겨찾기나 README.md에 링크를 추가하여 매번 사이트 주소를 찾는 번거로움을 줄일 수 있다.위와 같이 웹페이지에 테마가 적용 되었다면 GitHub 블로그 만들기에 첫 걸음을 내딛는 것이다.다른 테마를 선택하여 위 절차를 진행하는데 테마가 제대로 적용이 안되는 경우, 해당 테마의 GitHub 사이트에 별도로 설정해야 하는 절차가 있는지 확인하여 추가 절차를 진행해야 한다.">
+    <meta itemprop="datePublished" content="2021-08-07T00:00:00+09:00">
+    
+    
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="http://localhost:4000/20210807/" class="u-url" itemprop="url">개인 블로그 생성하기
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 분 소요
+        
+      </span>
+    
+  </p>
+
+
+          
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> 목차</h4></header>
+              <ul class="toc__menu"><li><a href="#github-pages">GitHub Pages</a></li><li><a href="#github-pages-시작하기">GitHub Pages 시작하기</a><ul><li><a href="#1-github-계정-생성하기">1. GitHub 계정 생성하기</a></li><li><a href="#2-저장소-만들기">2. 저장소 만들기</a></li><li><a href="#3-jekyll-theme-활용하기">3. Jekyll Theme 활용하기</a></li><li><a href="#4-개인-저장소에-테마-저장소-복사하기">4. 개인 저장소에 테마 저장소 복사하기</a></li></ul></li></ul></li></ul>
+
+            </nav>
+          </aside>
+        
+        <hr />
+<p>개인 블로그를 운영하기 위한 첫걸음으로 블로그의 종류에 대하여 알아보니 네이버 블로그, 티스토리, Velog 등 여러 플랫폼이 존재했다.
+블로그에 대한 지식과 경험이 없는 상태에서 무엇을 선택할지 고민하다가 자연스럽게 <del>개발자스러운</del>(배움의 길이 무궁무진한) 플랫폼인 깃허브 페이지(<em>GitHub Pages</em>)를 선택했다.</p>
+
+<h2 id="github-pages">GitHub Pages</h2>
+
+<p>GitHub Pages가 무엇인지 이해하기 앞서 GitHub란 무엇인지 궁금하여 검색을 통해 알아보았다.
+GitHub는 버전 관리와 협업을 위한 코드 호스팅 플랫폼이다.
+버전 관리는 버전 관리 시스템(<em>Version Control System:VCS</em>)에서 파일에 변화를 시간에 따라 기록하고 특정 버전의 파일을 가져올 수 있는 기능이다.
+VCS로 관리되는 형상(<em>소스 코드, 문서, 이미지 등</em>)을 클라우드 저장소에 담고 있어 사용자간에 협업이 용이할 수 있게 제공된다.</p>
+
+<p>GitHub Pages는 GitHub의 기능 중 하나로 클라우드 저장소에 내용을 웹호스팅 서비스로 제공된다.
+즉 자신이 개발한 웹페이지를 복잡한 웹서버를 구축하지 않고 서비스 할 수 있도록 도와주는 도구이다.</p>
+
+<h2 id="github-pages-시작하기">GitHub Pages 시작하기</h2>
+
+<h4 id="1-github-계정-생성하기">1. GitHub 계정 생성하기</h4>
+
+<p><img src="/assets/images/20210807/1.png" alt="" /></p>
+
+<p>GitHub Pages는 GitHub 계정당 하나의 사이트가 제공된다.
+계정이 없는 경우 계정당 하나의 이메일 인증으로 계정을 생성할 수 있다.
+비밀번호는 숫자와 소문자를 포함한 8 ~ 15자 이내로 만들어야 한다.</p>
+
+<h4 id="2-저장소-만들기">2. 저장소 만들기</h4>
+
+<p><img src="/assets/images/20210807/2.png" alt="" /></p>
+
+<p><img src="/assets/images/20210807/3.png" alt="" /></p>
+
+<p>로그인 후 메인화면 좌측 상단에 <code class="language-plaintext highlighter-rouge">Create repository</code> 또는 <code class="language-plaintext highlighter-rouge">New</code> 버튼을 클릭한다.</p>
+
+<p>이미 원하는 Jekyll 테마의 URL 정보를 취득한 경우 <code class="language-plaintext highlighter-rouge">Import repository</code> 버튼을 클릭 하고 <a href="#4-개인-저장소에-테마-저장소-복사하기">여기</a>를 눌러 다음 단계를 건너띈다.</p>
+
+<p><img src="/assets/images/20210807/4.png" alt="" /></p>
+
+<p>Owner와 Repository name을 입력하고 <code class="language-plaintext highlighter-rouge">Create repository</code> 버튼을 눌러 저장소를 생성 한다.
+Owner와 Repository name 값을 동일하게 입력할 때 위와 같이 시크릿 메시지가 출력 되며 <code class="language-plaintext highlighter-rouge">README.md</code>에 내용이 자동으로 GitHub 메인 사이트와 연동된다.</p>
+
+<h4 id="3-jekyll-theme-활용하기">3. Jekyll Theme 활용하기</h4>
+
+<p>Jekyll은 GitHub Pages에 대한 지원이 내장된 정적 웹사이트 생성기이다.
+GitHub 저장소 내 <code class="language-plaintext highlighter-rouge">Markdown</code>, <code class="language-plaintext highlighter-rouge">HTML</code> 등 파일을 정해진 규약으로 가져와 선택한 레이아웃을 기반으로 정적 웹사이트를 생성하는 도구이다.
+GitHub Pages에서 공식으로 지원하며 다양한 테마가 제공된다.</p>
+
+<p>Jekyll에 대한 추가 내용은 <a href="/about-jekyll">여기</a>에서 확인할 수 있다.</p>
+
+<ul>
+  <li><a href="https://github.com/topics/jekyll-theme" target="_blank">GitHub.com #jekyll-theme repos</a></li>
+  <li><a href="https://jamstackthemes.dev/ssg/jekyll/" target="_blank">jamstackthemes.dev</a></li>
+  <li><a href="http://jekyllthemes.org/" target="_blank">jekyllthemes.org</a></li>
+  <li><a href="https://jekyllthemes.io/" target="_blank">jekyllthemes.io</a></li>
+  <li><a href="https://jekyll-themes.com/" target="_blank">jekyll-themes.com</a></li>
+</ul>
+
+<p>위 링크는 Jekyll 테마 웹사이트를 제공하는 사이트 목록이다.
+링크에서 원하는 Jekyll 테마를 선택한다.</p>
+
+<p><img src="/assets/images/20210807/5.png" alt="" /></p>
+
+<p>테마를 선택했다면 테마의 GitHub 사이트에 접속한다.</p>
+
+<p>스크린샷의 테마를 사용하려면 <a href="https://jekyllthemes.io/theme/creative-theme-jekyll" target="_blank">여기</a>를 클릭한다.</p>
+
+<p><img src="/assets/images/20210807/6.png" alt="" /></p>
+
+<p>테마의 GitHub 메인 화면에서 <code class="language-plaintext highlighter-rouge">Code</code> 버튼을 클릭하여 URL 정보를 복사한다.</p>
+
+<h4 id="4-개인-저장소에-테마-저장소-복사하기">4. 개인 저장소에 테마 저장소 복사하기</h4>
+
+<p><img src="/assets/images/20210807/7.png" alt="" /></p>
+
+<p>저장소 만들기 단계에서 생성한 저장소 메인 화면에서 <code class="language-plaintext highlighter-rouge">Import code</code> 버튼을 클릭한다.</p>
+
+<p><img src="/assets/images/20210807/8.png" alt="" /></p>
+
+<p>URL 정보 입력란에 복사한 URL 정보를 입력하고 <code class="language-plaintext highlighter-rouge">Begin import</code> 버튼을 클릭한다.</p>
+
+<p><img src="/assets/images/20210807/9.png" alt="" /></p>
+
+<p>Jekyll 테마 저장소에 있는 데이터를 개인 저장소에 복사(<em>Clone</em>)할 때 작업 소요 시간은 테마 용량에 따라 다르다.
+<del>커피 한잔을 음미하며 차분히 기다린다.</del></p>
+
+<p><img src="/assets/images/20210807/10.png" alt="" /></p>
+
+<p>복사 작업이 완료되면 개인 저장소 메인 화면 -&gt; 설정(<em>Settings</em>) 메뉴 -&gt; 페이지 서브 메뉴에서 소스(<em>Source</em>) 영역에 <code class="language-plaintext highlighter-rouge">Branch: master</code>와 같이 설정 후 저장한다.
+위 웹페이지 주소를 통해 접속할 수 있으니 즐겨찾기나 <code class="language-plaintext highlighter-rouge">README.md</code>에 링크를 추가하여 매번 사이트 주소를 찾는 번거로움을 줄일 수 있다.</p>
+
+<p><img src="/assets/images/20210807/11.png" alt="" /></p>
+
+<p>위와 같이 웹페이지에 테마가 적용 되었다면 GitHub 블로그 만들기에 첫 걸음을 내딛는 것이다.</p>
+
+<p>다른 테마를 선택하여 위 절차를 진행하는데 테마가 제대로 적용이 안되는 경우, 해당 테마의 GitHub 사이트에 별도로 설정해야 하는 절차가 있는지 확인하여 추가 절차를 진행해야 한다.</p>
+
+<!--more-->
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> 태그: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#blog" class="page__taxonomy-item p-category" rel="tag">Blog</a><span class="sep">, </span>
+    
+      <a href="/tags/#github-pages" class="page__taxonomy-item p-category" rel="tag">Github Pages</a><span class="sep">, </span>
+    
+      <a href="/tags/#jekyll" class="page__taxonomy-item p-category" rel="tag">Jekyll</a>
+    
+    </span>
+  </p>
+
+
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 업데이트:</strong> <time class="dt-published" datetime="2021-08-07T00:00:00+09:00">August 7, 2021</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">공유하기</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%EA%B0%9C%EC%9D%B8+%EB%B8%94%EB%A1%9C%EA%B7%B8+%EC%83%9D%EC%84%B1%ED%95%98%EA%B8%B0%20http%3A%2F%2Flocalhost%3A4000%2F20210807%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2F20210807%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2F20210807%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="공유하기 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/20210806/" class="pagination--pager" title="블로그를 시작하며
+">이전</a>
+    
+    
+      <a href="/20210810/" class="pagination--pager" title="Jekyll에 대하여
+">다음</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h2 class="page__related-title">둘러보기</h2>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/assets/images/20221014/0_.png" alt="">
+      </div>
+    
+    <h4 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/20221014/" rel="permalink">의료영상 저장 전송 시스템 (PACS, Picture Archiving and Communication System)
+</a>
+      
+    </h4>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          36 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+전세계적으로 컴퓨터를 이용한 시스템을 의학 분야에 적용하려는 시도가 붐을 이루고 있다.
+특히 그 이용에 따른 부대 효과나 이용 효율면에서 직접적으로 도움을 받을 수 있는 처방 전달 시스템(OCS, Order Communication System)은 이미 국내의 여러 병원에 설치...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/assets/images/20221013/0_.png" alt="">
+      </div>
+    
+    <h4 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/20221013/" rel="permalink">C-arm
+</a>
+      
+    </h4>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+골절 수술하는 환자의 진료차트를 보면 많이 등장하는 C-arm 이란 수술장비가 있다.
+특히 척추 관련 수술한 환자는 쉽게 접할 것이다.
+C-arm 명칭은 말 그대로 C자형 팔을 닮았다고 해서 붙여진 이름이다.
+CT와 같은 중대형 의료기기보다 훨씬 작고 이동이 가능하기 때문에 병...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/assets/images/20220930/0_.png" alt="">
+      </div>
+    
+    <h4 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/20220930/" rel="permalink">의료기기에 의한 방사선 노출과 위험(Radiation Exposure and Risk by Medical Devices)
+</a>
+      
+    </h4>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          5 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+CT나 X-ray 등 질병의 조기 발견이나 진단, 치료에 쓰이는 각종 기기는 고해상도 영상 출력을 위해 일정 수준의 방사선을 방출한다.
+이로 인해 해당 기기로 진단이나 치료를 받은 환자는 방사선에 피폭(被曝, 인체가 방사선에 노출됨)된다.
+하지만 이렇게 노출된 방사선이 인체에 ...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/assets/images/20220818/0_.png" alt="">
+      </div>
+    
+    <h4 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/20220818/" rel="permalink">방사선 전문 용어 및 약어 정리(Radiation Terms and Abbreviations)
+</a>
+      
+    </h4>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 분 소요
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+
+방사선 전문 용어
+
+
+  
+    
+      명칭
+      영문명
+      설명
+    
+  
+  
+    
+      X-선
+      X-Ray
+      가시광선 보다 짧은 파장을 가진 침투 이온화 전자기 방사선.
+    
+    
+      감지기어레이
+      ...</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="검색어를 입력하세요..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<div align="center">
+  <a href="#site-nav" class="btn">맨 위로 이동</a>
+</div>
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>팔로우:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+          <li><a href="https://github.com/lh-b" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="http://lh-b.iptime.org/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-gitlab" aria-hidden="true"></i> GitLab</a></li>
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> 피드</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2023 Huiboly blog.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'lh-b/lh-b.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+<script type="text/javascript" async
+         src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+     </script>
+
+     <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+         extensions: ["tex2jax.js"],
+         jax: ["input/TeX", "output/HTML-CSS"],
+         tex2jax: {
+         inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+         displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+         processEscapes: true
+         },
+         "HTML-CSS": { availableFonts: ["TeX"] }
+     });
+     </script>
+
+
+  </body>
+</html>
