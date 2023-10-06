@@ -1,8 +1,9 @@
 # Directory
-.vs/*
-.dev-pages/*
-.jekyll-cache/*
-_site/*
+.vs/
+.dev-pages/
+.jekyll-cache/
+_site/
+ebug/
 
 
 # File
