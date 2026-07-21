@@ -26,21 +26,55 @@ client = ChatCompletionsClient(
     credential=AzureKeyCredential(token),
 )
 
-# 3. 최신 IT 동향 및 핵심 기술 주제 후보군
-CATEGORIES = [
-    "Agentic AI Systems & Multi-Agent Workflows",
-    "Retrieval-Augmented Generation (RAG) & Vector Search",
-    "Multimodal AI & Visual Language Models",
-    "LLMOps, Evaluation & AI Observability",
-    "Edge AI & On-Device Inference Optimization",
-    "eBPF & Modern Cloud-Native Observability",
-    "High-Performance System Architecture with Rust",
-    "Zero Trust Security & AI Safety Governance",
-    "Real-Time Data Streaming & Lakehouse Architecture",
-    "Quantum-Resistant Cryptography & Post-Quantum Security"
-]
+# 3. 최신 IT 동향 및 핵심 기술 주제를 동적으로 가져오는 함수
+def get_latest_tech_topic(client_instance):
+    """
+    LLM을 활용하여 현재 시점의 최신 IT 동향 및 핵심 소프트웨어 엔지니어링 주제를 동적으로 생성/선정합니다.
+    """
+    fallback_categories = [
+        "Agentic AI Systems & Multi-Agent Workflows",
+        "Retrieval-Augmented Generation (RAG) & Vector Search",
+        "Multimodal AI & Visual Language Models",
+        "LLMOps, Evaluation & AI Observability",
+        "Edge AI & On-Device Inference Optimization",
+        "eBPF & Modern Cloud-Native Observability",
+        "High-Performance System Architecture with Rust",
+        "Zero Trust Security & AI Governance",
+        "Real-Time Data Streaming & Lakehouse Architecture"
+    ]
 
-selected_category = random.choice(CATEGORIES)
+    system_prompt = """
+너는 글로벌 IT 기술 트렌드 분석가이자 최고 기술 책임자(CTO)이다.
+현재 최신 IT/소프트웨어 엔지니어링 분야에서 가장 중요한 실무 아키텍처 및 트렌드 주제 1개를 선정하라.
+
+[선정 조건]
+1. 단순 추상적/마케팅 용어가 아니라 실제 코드 및 기술 아키텍처로 구현 가능한 구체적인 엔지니어링 주제일 것.
+2. 영문 제목으로 명확하고 간결하게 출력할 것 (예: "Agentic Multi-Agent Workflows with LangGraph", "eBPF-driven Zero Trust Network Security").
+3. 따옴표, 설명, 번호 등의 부연 설명 없이 오직 '주제명 텍스트'만 단 한 줄로 출력할 것.
+"""
+    user_prompt = f"오늘 날짜({date_dash}) 기준, 최근 IT 산업에서 가장 주목받고 가치 있는 고난도 기술 주제 1개를 선정해줘."
+
+    try:
+        response = client_instance.complete(
+            messages=[
+                SystemMessage(content=system_prompt),
+                UserMessage(content=user_prompt),
+            ],
+            model="gpt-4o",
+            temperature=0.7,
+            max_tokens=100
+        )
+        
+        topic = response.choices[0].message.content.strip().strip('"').strip("'")
+        if topic:
+            print(f"✨ 동적 생성된 최신 IT 주제: {topic}")
+            return topic
+            
+    except Exception as e:
+        print(f"[경고] 동적 주제 생성 중 오류 발생: {e}. 기본 예비 주제 목록에서 선택합니다.")
+    
+    # 예외 발생 시 예비 목록에서 임의 선택
+    return random.choice(fallback_categories)
 
 # 4. 예외 발생 시 대체 이미지를 만드는 함수
 def create_fallback_image(img_path, category_text):
@@ -68,7 +102,6 @@ def generate_and_save_image(img_dir, category):
     encoded_prompt = urllib.parse.quote(prompt)
     
     # Pollinations.ai 무료 API 엔드포인트 설정 (Flux 모델 활용)
-    # 별도 API Key 없이 완전 무료 사용 가능
     seed = random.randint(10000, 99999)
     image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1000&height=600&seed={seed}&nologo=true&model=flux"
     
@@ -82,7 +115,7 @@ def generate_and_save_image(img_dir, category):
         with urllib.request.urlopen(req, timeout=60) as response, open(temp_download_path, 'wb') as out_file:
             out_file.write(response.read())
 
-        # 2. Pillow를 이용하여 정확한 500x300 비율로 크롭 및 리사이징
+        # Pillow를 이용하여 정확한 500x300 비율로 크롭 및 리사이징
         with Image.open(temp_download_path) as img:
             target_width, target_height = 500, 300
             
@@ -181,7 +214,10 @@ def main():
     os.makedirs(posts_dir, exist_ok=True)
     os.makedirs(img_dir, exist_ok=True)
 
-    print(f"🎯 작성 주제: {selected_category}")
+    # 단순 random.choice 대신 LLM을 활용한 동적 최신 IT 주제 가져오기 실행
+    selected_category = get_latest_tech_topic(client)
+
+    print(f"🎯 최종 작성 주제: {selected_category}")
 
     # 1. Pollinations API 기반 500x300 이미지 무료 생성
     generate_and_save_image(img_dir, selected_category)
