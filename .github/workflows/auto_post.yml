@@ -2,8 +2,7 @@ name: Auto Generate Jekyll Tech Post
 
 on:
   schedule:
-    # 한국 시간 기준 매주 월요일 오전 9시 (UTC 기준 일요일 24시 / 월요일 00:00)
-    - cron: '0 0 * * 1'
+    - cron: '0 0 * * 1' # 매주 월요일 KST 09:00
   workflow_dispatch:
 
 jobs:
@@ -23,7 +22,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install azure-ai-inference pillow
+          pip install azure-ai-inference
 
       - name: Run Auto Post Generator
         env:
@@ -36,7 +35,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # .md 파일 및 새로 생성된 이미지 파일(assets/images/) 모두 스테이징
+          # 포스팅 문서와 생성된 이미지 파일 모두 스테이징
           git add _posts/ assets/images/
           
-          git diff --staged --quiet || (git commit -m "chore: auto-generate tech post and images (${{ github.event.repository.updated_at }}) [skip ci]" && git push)
+          git diff --staged --quiet || (git commit -m "chore: auto post & image upload [skip ci]" && git push)
