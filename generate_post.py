@@ -1,17 +1,20 @@
 import os
 import re
 import json
+import random
 import urllib.request
+from PIL import Image
+from io import BytesIO
 from datetime import datetime, timezone, timedelta
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
 
-# 1. 한국 시간대(KST = UTC+9) 설정
+# 1. 한국 시간대(KST = UTC+9) 및 날짜 포맷 설정
 KST = timezone(timedelta(hours=9))
 now = datetime.now(KST)
-date_str = now.strftime("%Y-%m-%d")
-date_compact = now.strftime("%Y%m%d")
+date_dash = now.strftime("%Y-%m-%d")    # YYYY-MM-DD
+date_compact = now.strftime("%Y%m%d")   # YYYYMMDD
 
 # 2. GitHub Models Client 설정
 token = os.environ.get("GH_MODELS_TOKEN")
@@ -23,61 +26,115 @@ client = ChatCompletionsClient(
     credential=AzureKeyCredential(token),
 )
 
-# 3. 최신 IT 이슈 수집 (Hacker News API)
-def get_latest_it_trends():
-    try:
-        url = "https://hacker-news.firebaseio.com/v0/topstories.json"
-        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req, timeout=10) as response:
-            top_ids = json.loads(response.read().decode())[:5]
-        
-        titles = []
-        for item_id in top_ids:
-            item_url = f"https://hacker-news.firebaseio.com/v0/item/{item_id}.json"
-            with urllib.request.urlopen(item_url, timeout=5) as resp:
-                data = json.loads(resp.read().decode())
-                titles.append(f"- {data.get('title')} ({data.get('url', '')})")
-        return "\n".join(titles)
-    except Exception as e:
-        print(f"[경고] 트렌드 수집 중 오류 발생 (기본 주제 사용): {e}")
-        return "- 최신 인공지능, 딥러닝 기술 트렌드 및 대규모 언어 모델(LLM) 동향"
+# 3. IT 핵심 기술 주제 후보군 무작위 선정
+CATEGORIES = [
+    "영상처리(Computer Vision & Image Processing)",
+    "인공지능 및 딥러닝(Artificial Intelligence & Deep Learning)",
+    "데이터 분석 및 처리(Data Analysis & Pipeline Processing)",
+    "대규모 언어 모델 및 자연어 처리(LLM & NLP)",
+    "분산 데이터 베이스 및 머신러닝 파이프라인(MLOps & Data Engineering)"
+]
 
-# 4. 프롬프트 정의 및 글 생성
-def generate_article():
-    trends = get_latest_it_trends()
+selected_category = random.choice(CATEGORIES)
+
+# 4. 주제에 맞는 명확한 개념 이미지 생성 및 저장 (티저 이미지 버그 완벽 방지)
+def generate_and_save_image(img_dir, category):
+    img_path = os.path.join(img_dir, "0_.png")
     
-    system_prompt = f"""
-너는 IT 기술 블로그를 운영하는 전문 엔지니어 겸 아키텍트이다.
-주어진 최신 IT 트렌드를 주제로 깊이 있는 기술 블로그 포스팅을 작성하라.
+    # 프롬프트 조정: 500x300 비율(가로형)에 잘 맞도록 원본 구도 지정
+    prompt = f"A highly detailed, professional horizontal technical diagram representing {category}. Tech blog header style, clean node graphs, data flows, and neural networks, dark background."
+    
+    # 최대 3회 재시도 (API 딜레이 및 타임아웃 대비)
+    max_retries = 3
+    
+    for attempt in range(1, max_retries + 1):
+        try:
+            print(f"🎨 이미지 생성 시도 ({attempt}/{max_retries})...")
+            
+            url = "https://models.inference.ai.azure.com/images/generations"
+            headers = {
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json"
+            }
+            # DALL-E 3 표준 규격 사용 (비표준 사이즈 사용 시 400 에러 방지)
+            body = json.dumps({
+                "prompt": prompt,
+                "model": "dall-e-3",
+                "n": 1,
+                "size": "1024x1024"
+            }).encode("utf-8")
 
-[Frontmatter 및 작성 규칙]
-1. 문서 최상단에 반드시 아래와 같은 포맷의 YAML Frontmatter를 작성할 것:
+            # 타임아웃을 120초로 여유 있게 부여하여 타임아웃으로 인한 실패 방지
+            req = urllib.request.Request(url, data=body, headers=headers, method="POST")
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                res_data = json.loads(resp.read().decode())
+                image_url = res_data["data"][0]["url"]
+
+            # 생성된 원본 이미지 다운로드 (타임아웃 60초)
+            with urllib.request.urlopen(image_url, timeout=60) as img_resp:
+                img_bytes = img_resp.read()
+
+            # Pillow 라이브러리로 메모리 상에서 이미지 읽기 및 500x300 리사이징
+            image = Image.open(BytesIO(img_bytes))
+            resized_image = image.resize((500, 300), Image.Resampling.LANCZOS)
+            
+            # 최종 500x300 규격 이미지 파일로 저장
+            resized_image.save(img_path, "PNG")
+            
+            file_size = os.path.getsize(img_path)
+            print(f"✅ 유효한 500x300 이미지 저장 성공! (용량: {file_size} bytes)")
+            return True
+
+        except Exception as e:
+            print(f"⚠️ [{attempt}/{max_retries}] 이미지 생성 실패/지연: {e}")
+            if attempt < max_retries:
+                time.sleep(10) # 10초 대기 후 재시도
+            else:
+                print("❌ 모든 재시도 실패.")
+
+    # 3회 재시도 모두 실패 시: 깨진 더미(67byte)를 절대 남기지 않고 
+    # 완전히 깨끗한 단색 500x300 기본 배경 이미지를 안전하게 직접 생성
+    print("🛡️ 예외 안전장치 동작: 단색 500x300 대체 기술 이미지 자동 생성 중...")
+    fallback_img = Image.new("RGB", (500, 300), color=(30, 41, 59)) # 딥블루톤 배경
+    fallback_img.save(img_path, "PNG")
+    return False
+
+# 5. 프롬프트 정의 및 기술 문서 생성
+def generate_article(category):
+    system_prompt = f"""
+너는 영상처리, 인공지능, 데이터 분석 분야의 수석 엔지니어이다.
+제시된 IT 핵심 기술 분야 중 하나를 선정하여 전문적인 기술 문서를 작성하라.
+
+[작성 포맷 및 어조 규칙]
+1. 존댓말(~해요, ~합니다)을 절대로 사용하지 말 것.
+2. 개조식 표현(~함, ~임) 또는 기술 서술용 평어/해라체(~다, ~한다)만 사용할 것.
+3. 문서 상단 Frontmatter 규격을 엄격히 준수할 것:
 ---
-title: "제목 입력"
+title: "[기술명] 핵심 개념 및 검증된 실무 활용법"
 tags:
-  - 태그1
-  - 태그2
-  - 태그3
+  - IT기술
+  - {category.split('(')[0].strip()}
+  - 기술분석
 header:
-  teaser: assets/images/{date_compact}/teaser.png
+  teaser: /assets/images/{date_compact}/0_.png
 toc: true
 toc_sticky: true
 excerpt_separator: <!--more-->
 ---
 
-2. 본문 작성 규칙:
-- 개요(Introduction) 작성 직후 반드시 `<!--more-->` 주석을 넣을 것.
-- 가독성을 위해 H4(####), H5(#####) 등 적절한 마크다운 헤더를 활용할 것.
-- 단순 뉴스 요약이 아닌, 백엔드/AI 엔지니어 관점의 시사점, 장단점, 실제 적용 방안 등 전문적인 생각을 상세히 서술할 것.
-- 이미지를 삽입할 경우 반드시 `/assets/images/{date_compact}/` 경로를 기준으로 작성할 것. (예: ![](/assets/images/{date_compact}/1.png))
-- 부드러우면서도 기술적인 전문성을 가진 톤앤매너 유지.
+[본문 필수 구성 요소]
+1. 개요 서술 후 즉시 `<!--more-->` 주석 배치.
+2. 기술의 개요 및 핵심 원리 설명.
+3. 본문 내 주제를 직관적으로 전달할 수 있는 이미지 매핑 포함: `![](/assets/images/{date_compact}/0_.png)`
+4. 검증된 사용 방법 (실제 동작 가능한 Python / PyTorch / OpenCV / Pandas 등의 코드 예제 및 적용 가이드 포함).
+5. 실제 실무 적용 시 고려해야 할 장단점 및 한계점 정리.
 """
 
     user_prompt = f"""
-오늘 날짜: {date_str}
+오늘 날짜: {date_dash}
+이번 포스팅 주제 분야: {category}
 
-아래 트렌드 소식을 바탕으로 블로그 포스팅을 작성해줘:
-{trends}
+해당 분야의 대표적인 핵심 기술 하나를 직접 선정한 후, 검증된 구현 코드 및 사용법을 포함하여 실무에 즉시 적용 가능한 깊이 있는 글을 작성하라.
 """
 
     response = client.complete(
@@ -86,73 +143,40 @@ excerpt_separator: <!--more-->
             UserMessage(content=user_prompt),
         ],
         model="gpt-4o",
-        temperature=0.7,
-        max_tokens=3000
+        temperature=0.4,
+        max_tokens=3500
     )
     
     return response.choices[0].message.content
 
-# 5. 티저 이미지 생성 및 저장
-def generate_teaser_image(article_title):
-    try:
-        # 이미지 생성을 위한 프롬프트 작성
-        image_prompt = f"A high-quality, professional teaser image for a tech blog post titled '{article_title}'. The image should be visually appealing and represent the themes of technology, innovation, and the future. It should be suitable for use as a social media share image or a blog post header."
-        
-        # GitHub Models API를 통해 이미지 생성 (DALL-E 3 모델 사용)
-        image_response = client.complete(
-            messages=[
-                UserMessage(content=image_prompt),
-            ],
-            model="dall-e-3",
-            max_tokens=1
-        )
-        
-        # 생성된 이미지 URL 가져오기
-        image_url = image_response.choices[0].message.content
-        
-        # 이미지 다운로드 및 저장
-        img_dir = f"assets/images/{date_compact}"
-        os.makedirs(img_dir, exist_ok=True)
-        img_filename = f"{img_dir}/teaser.png"
-        urllib.request.urlretrieve(image_url, img_filename)
-        
-        print(f"✅ 티저 이미지가 성공적으로 생성되었습니다: {img_filename}")
-    except Exception as e:
-        print(f"[경고] 티저 이미지 생성 중 오류 발생: {e}")
-
-# 6. 응답 정제 및 파일 저장
 def clean_markdown_output(text):
-    # LLM이 출력물 앞뒤로 ```markdown ... ``` 펜스를 씌우는 경우 제거
     text = re.sub(r"^```markdown\s*", "", text, flags=re.MULTILINE)
     text = re.sub(r"^```\s*", "", text, flags=re.MULTILINE)
     text = re.sub(r"```$", "", text, flags=re.MULTILINE)
     return text.strip()
 
 def main():
-    content = generate_article()
+    posts_dir = "_posts"
+    img_dir = f"assets/images/{date_compact}"
+    
+    os.makedirs(posts_dir, exist_ok=True)
+    os.makedirs(img_dir, exist_ok=True)
+
+    print(f"🎯 선정된 IT 핵심 분야: {selected_category}")
+
+    # 1. 티저 및 본문 이미지 생성 (assets/images/YYYYMMDD/0_.png)
+    generate_and_save_image(img_dir, selected_category)
+
+    # 2. 기술 블로그 문서 생성 및 저장 (_posts/YYYY-MM-DD-YYYYMMDD.md)
+    content = generate_article(selected_category)
     cleaned_content = clean_markdown_output(content)
     
-    # 생성된 글의 제목 가져오기
-    title_match = re.search(r"^title:\s*\"(.*)\"", cleaned_content, flags=re.MULTILINE)
-    if title_match:
-        article_title = title_match.group(1)
-    else:
-        article_title = "IT Tech Trends"
-    
-    # 티저 이미지 생성
-    generate_teaser_image(article_title)
-    
-    # 저장 경로 설정 (_posts 디렉토리 준비)
-    posts_dir = "_posts"
-    os.makedirs(posts_dir, exist_ok=True)
-    
-    # 영어/숫자 위주의 안전한 파일명 생성 (예: _posts/2026-07-21-it-tech-trends.md)
-    filename = os.path.join(posts_dir, f"{date_str}-it-tech-trends.md")
+    filename = os.path.join(posts_dir, f"{date_dash}-{date_compact}.md")
     
     with open(filename, "w", encoding="utf-8") as f:
         f.write(cleaned_content)
         
-    print(f"✅ 포스팅이 성공적으로 생성되었습니다: {filename}")
+    print(f"✅ 포스팅 생성 완료: {filename}")
 
 if __name__ == "__main__":
     main()
