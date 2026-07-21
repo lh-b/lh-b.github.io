@@ -3,6 +3,7 @@ import re
 import json
 import random
 import urllib.request
+import urllib.parse
 from datetime import datetime, timezone, timedelta
 from PIL import Image, ImageDraw, ImageFont
 from azure.ai.inference import ChatCompletionsClient
@@ -36,7 +37,7 @@ CATEGORIES = [
 
 selected_category = random.choice(CATEGORIES)
 
-# 4. 예외 발생 시 손상된 이미지 대신 정식 500x300 대체 이미지를 만드는 함수
+# 4. 예외 발생 시 대체 이미지를 만드는 함수
 def create_fallback_image(img_path, category_text):
     width, height = 500, 300
     # 기술 블로그에 어울리는 다크 모드 배경
@@ -51,41 +52,33 @@ def create_fallback_image(img_path, category_text):
     draw.text((30, 120), text, fill=(241, 245, 249))
     
     img.save(img_path, "PNG")
-    print(f"⚠️ API 이미지 생성 실패로 500x300 대체 이미지를 고화질로 생성했습니다: {img_path}")
+    print(f"⚠️ 대체 이미지 생성 완료: {img_path}")
 
-# 5. 500x300 명확한 기술 개념 이미지 생성 및 저장
+# 5. Pollinations.ai (무료 Flux/SD 기반) API를 활용한 이미지 생성
 def generate_and_save_image(img_dir, category):
     img_path = os.path.join(img_dir, "0_.png")
     temp_download_path = os.path.join(img_dir, "temp_raw.png")
     
-    prompt = f"A high quality, clear technical architecture diagram representing {category}. Professional tech blog style, modern infographic with clean node graphs and data flows, dark background."
+    prompt = f"A high quality visual technical architecture diagram representing {category}, professional tech blog style, modern infographic with clean node graphs, dark background, vector art"
+    encoded_prompt = urllib.parse.quote(prompt)
+    
+    # Pollinations.ai 무료 API 엔드포인트 설정 (Flux 모델 활용)
+    # 별도 API Key 없이 완전 무료 사용 가능
+    seed = random.randint(10000, 99999)
+    image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1000&height=600&seed={seed}&nologo=true&model=flux"
     
     try:
-        url = "https://models.inference.ai.azure.com/images/generations"
-        headers = {
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json"
-        }
-        # DALL-E-3 규격에 맞는 표준 해상도로 요청
-        body = json.dumps({
-            "prompt": prompt,
-            "model": "dall-e-3",
-            "n": 1,
-            "size": "1024x1024"
-        }).encode("utf-8")
+        req = urllib.request.Request(
+            image_url, 
+            headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+        )
+        
+        # 이미지 다운로드 (timeout 60초)
+        with urllib.request.urlopen(req, timeout=60) as response, open(temp_download_path, 'wb') as out_file:
+            out_file.write(response.read())
 
-        # 충분한 작업시간 부여 (timeout 90초)
-        req = urllib.request.Request(url, data=body, headers=headers, method="POST")
-        with urllib.request.urlopen(req, timeout=90) as resp:
-            res_data = json.loads(resp.read().decode())
-            image_url = res_data["data"][0]["url"]
-
-        # 1. 임시 파일로 원본 이미지 다운로드
-        urllib.request.urlretrieve(image_url, temp_download_path)
-
-        # 2. Pillow를 이용하여 정확한 500x300 비율로 가공 및 리사이징
+        # 2. Pillow를 이용하여 정확한 500x300 비율로 크롭 및 리사이징
         with Image.open(temp_download_path) as img:
-            # 비율을 유지하며 중앙 크롭 및 500x300 리사이즈
             target_width, target_height = 500, 300
             
             # 비율 맞춤 계산
@@ -109,7 +102,7 @@ def generate_and_save_image(img_dir, category):
         if os.path.exists(temp_download_path):
             os.remove(temp_download_path)
 
-        print(f"✅ 500x300 유효 이미지 생성 및 저장 완료: {img_path}")
+        print(f"✅ 무료 AI 이미지 생성 및 500x300 저장 완료: {img_path}")
         return True
 
     except Exception as e:
@@ -117,7 +110,6 @@ def generate_and_save_image(img_dir, category):
         if os.path.exists(temp_download_path):
             os.remove(temp_download_path)
             
-        # 67 Bytes 깨진 파일 대신 500x300 유효 그래픽 이미지 생성
         create_fallback_image(img_path, category)
         return False
 
@@ -187,7 +179,7 @@ def main():
 
     print(f"🎯 작성 주제: {selected_category}")
 
-    # 1. 500x300 이미지 안전 생성 및 검증
+    # 1. Pollinations API 기반 500x300 이미지 무료 생성
     generate_and_save_image(img_dir, selected_category)
 
     # 2. 마크다운 포스트 파일 생성 (_posts/YYYY-MM-DD-YYYYMMDD.md)
