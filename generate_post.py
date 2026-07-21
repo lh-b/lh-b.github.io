@@ -26,13 +26,18 @@ client = ChatCompletionsClient(
     credential=AzureKeyCredential(token),
 )
 
-# 3. IT 핵심 기술 주제 후보군
+# 3. 최신 IT 동향 및 핵심 기술 주제 후보군
 CATEGORIES = [
-    "Computer Vision & Image Processing",
-    "Deep Learning & Artificial Intelligence",
-    "Data Engineering & Analytics Pipeline",
-    "Large Language Models & NLP",
-    "MLOps & Distributed Systems"
+    "Agentic AI Systems & Multi-Agent Workflows",
+    "Retrieval-Augmented Generation (RAG) & Vector Search",
+    "Multimodal AI & Visual Language Models",
+    "LLMOps, Evaluation & AI Observability",
+    "Edge AI & On-Device Inference Optimization",
+    "eBPF & Modern Cloud-Native Observability",
+    "High-Performance System Architecture with Rust",
+    "Zero Trust Security & AI Safety Governance",
+    "Real-Time Data Streaming & Lakehouse Architecture",
+    "Quantum-Resistant Cryptography & Post-Quantum Security"
 ]
 
 selected_category = random.choice(CATEGORIES)
@@ -129,7 +134,7 @@ title: "{category}"
 tags:
   - IT Technology
   - {category.split()[0]}
-  - 엔지니어링
+  - Engineering
 header:
   teaser: /assets/images/{date_compact}/0_.png
 toc: true
@@ -140,9 +145,8 @@ excerpt_separator: <!--more-->
 [본문 필수 구조]
 1. 개요 서술 후 `<!--more-->` 주석 필수 삽입.
 2. 기술 개요 및 핵심 원리 설명.
-3. 본문 내 시각 자료 참조 삽입: `![](/assets/images/{date_compact}/0_.png)`
-4. 실무에서 검증된 코드 구현체(Python/PyTorch/Pandas 등)와 사용 가이드 작성.
-5. 적용 시 장단점 및 고려사항 명시.
+3. 실무에서 검증된 코드 구현체(Python/PyTorch/Pandas 등)와 사용 가이드 작성.
+4. 적용 시 장단점 및 고려사항 명시.
 """
 
     user_prompt = f"""
