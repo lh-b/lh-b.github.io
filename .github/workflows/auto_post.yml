@@ -35,7 +35,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # 포스팅 문서와 생성된 이미지 파일 모두 스테이징
+          # 새 포스트 파일과 생성된 이미지 디렉토리 전체 추적
           git add _posts/ assets/images/
           
-          git diff --staged --quiet || (git commit -m "chore: auto post & image upload [skip ci]" && git push)
+          git diff --staged --quiet || (git commit -m "chore: auto post with valid technical images [skip ci]" && git push)
