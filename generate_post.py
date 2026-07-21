@@ -133,9 +133,9 @@ def generate_article(category):
 
 [Frontmatter 규칙]
 ---
-title: "[기술] {category} 핵심 원리 및 검증된 활용법"
+title: "{category}"
 tags:
-  - IT기술
+  - IT Technology
   - {category.split()[0]}
   - 엔지니어링
 header:
