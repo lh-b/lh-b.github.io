@@ -222,10 +222,7 @@ def main():
     content = generate_article(selected_category)
     cleaned_content = clean_markdown_output(content)
     
-    # URL 및 파일명용 안전한 영문 슬러그(slug) 생성
-    slug = re.sub(r'[^a-zA-Z0-9]', '-', selected_category.lower())
-    slug = re.sub(r'-+', '-', slug).strip('-')[:40]
-    filename = os.path.join(posts_dir, f"{date_dash}-{slug}.md")
+    filename = os.path.join(posts_dir, f"{date_dash}-{date_compact}.md")
     
     with open(filename, "w", encoding="utf-8") as f:
         f.write(cleaned_content)
