@@ -1,0 +1,40 @@
+name: Auto Generate Jekyll Tech Post
+
+on:
+  schedule:
+    # 한국 시간 기준 매주 월요일 오전 9시 (UTC 일요일 24:00 = 월요일 00:00)
+    - cron: '0 0 * * 1'
+  workflow_dispatch: # 필요 시 언제든 GitHub 웹에서 버튼을 눌러 수동 실행 가능
+
+jobs:
+  build-and-commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # _posts 에 파일을 저장하고 push하기 위한 권한
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install azure-ai-inference
+
+      - name: Run Auto Post Generator
+        env:
+          GH_MODELS_TOKEN: ${{ secrets.GH_MODELS_TOKEN }}
+        run: |
+          python generate_post.py
+
+      - name: Commit and Push generated post
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add _posts/ assets/images/
+          # 변경사항이 존재하는 경우에만 커밋 실행
+          git diff --staged --quiet || (git commit -m "chore: auto-generate tech blog post (${{ github.event.repository.updated_at }}) [skip ci]" && git push)
