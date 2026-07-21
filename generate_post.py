@@ -3,9 +3,8 @@ import re
 import json
 import random
 import urllib.request
-from PIL import Image
-from io import BytesIO
 from datetime import datetime, timezone, timedelta
+from PIL import Image, ImageDraw, ImageFont
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
@@ -26,95 +25,119 @@ client = ChatCompletionsClient(
     credential=AzureKeyCredential(token),
 )
 
-# 3. IT 핵심 기술 주제 후보군 무작위 선정
+# 3. IT 핵심 기술 주제 후보군
 CATEGORIES = [
-    "영상처리(Computer Vision & Image Processing)",
-    "인공지능 및 딥러닝(Artificial Intelligence & Deep Learning)",
-    "데이터 분석 및 처리(Data Analysis & Pipeline Processing)",
-    "대규모 언어 모델 및 자연어 처리(LLM & NLP)",
-    "분산 데이터 베이스 및 머신러닝 파이프라인(MLOps & Data Engineering)"
+    "Computer Vision & Image Processing",
+    "Deep Learning & Artificial Intelligence",
+    "Data Engineering & Analytics Pipeline",
+    "Large Language Models & NLP",
+    "MLOps & Distributed Systems"
 ]
 
 selected_category = random.choice(CATEGORIES)
 
-# 4. 주제에 맞는 명확한 개념 이미지 생성 및 저장 (티저 이미지 버그 완벽 방지)
+# 4. 예외 발생 시 손상된 이미지 대신 정식 500x300 대체 이미지를 만드는 함수
+def create_fallback_image(img_path, category_text):
+    width, height = 500, 300
+    # 기술 블로그에 어울리는 다크 모드 배경
+    img = Image.new('RGB', (width, height), color=(15, 23, 42))
+    draw = ImageDraw.Draw(img)
+    
+    # 테두리 선 추가
+    draw.rectangle([5, 5, width - 6, height - 6], outline=(56, 189, 248), width=2)
+    
+    # 텍스트 그리기 (기본 폰트 사용)
+    text = f"Tech Topic:\n{category_text}"
+    draw.text((30, 120), text, fill=(241, 245, 249))
+    
+    img.save(img_path, "PNG")
+    print(f"⚠️ API 이미지 생성 실패로 500x300 대체 이미지를 고화질로 생성했습니다: {img_path}")
+
+# 5. 500x300 명확한 기술 개념 이미지 생성 및 저장
 def generate_and_save_image(img_dir, category):
     img_path = os.path.join(img_dir, "0_.png")
+    temp_download_path = os.path.join(img_dir, "temp_raw.png")
     
-    # 프롬프트 조정: 500x300 비율(가로형)에 잘 맞도록 원본 구도 지정
-    prompt = f"A highly detailed, professional horizontal technical diagram representing {category}. Tech blog header style, clean node graphs, data flows, and neural networks, dark background."
+    prompt = f"A high quality, clear technical architecture diagram representing {category}. Professional tech blog style, modern infographic with clean node graphs and data flows, dark background."
     
-    # 최대 3회 재시도 (API 딜레이 및 타임아웃 대비)
-    max_retries = 3
-    
-    for attempt in range(1, max_retries + 1):
-        try:
-            print(f"🎨 이미지 생성 시도 ({attempt}/{max_retries})...")
+    try:
+        url = "https://models.inference.ai.azure.com/images/generations"
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json"
+        }
+        # DALL-E-3 규격에 맞는 표준 해상도로 요청
+        body = json.dumps({
+            "prompt": prompt,
+            "model": "dall-e-3",
+            "n": 1,
+            "size": "1024x1024"
+        }).encode("utf-8")
+
+        # 충분한 작업시간 부여 (timeout 90초)
+        req = urllib.request.Request(url, data=body, headers=headers, method="POST")
+        with urllib.request.urlopen(req, timeout=90) as resp:
+            res_data = json.loads(resp.read().decode())
+            image_url = res_data["data"][0]["url"]
+
+        # 1. 임시 파일로 원본 이미지 다운로드
+        urllib.request.urlretrieve(image_url, temp_download_path)
+
+        # 2. Pillow를 이용하여 정확한 500x300 비율로 가공 및 리사이징
+        with Image.open(temp_download_path) as img:
+            # 비율을 유지하며 중앙 크롭 및 500x300 리사이즈
+            target_width, target_height = 500, 300
             
-            url = "https://models.inference.ai.azure.com/images/generations"
-            headers = {
-                "Authorization": f"Bearer {token}",
-                "Content-Type": "application/json"
-            }
-            # DALL-E 3 표준 규격 사용 (비표준 사이즈 사용 시 400 에러 방지)
-            body = json.dumps({
-                "prompt": prompt,
-                "model": "dall-e-3",
-                "n": 1,
-                "size": "1024x1024"
-            }).encode("utf-8")
+            # 비율 맞춤 계산
+            img_ratio = img.width / img.height
+            target_ratio = target_width / target_height
 
-            # 타임아웃을 120초로 여유 있게 부여하여 타임아웃으로 인한 실패 방지
-            req = urllib.request.Request(url, data=body, headers=headers, method="POST")
-            with urllib.request.urlopen(req, timeout=120) as resp:
-                res_data = json.loads(resp.read().decode())
-                image_url = res_data["data"][0]["url"]
-
-            # 생성된 원본 이미지 다운로드 (타임아웃 60초)
-            with urllib.request.urlopen(image_url, timeout=60) as img_resp:
-                img_bytes = img_resp.read()
-
-            # Pillow 라이브러리로 메모리 상에서 이미지 읽기 및 500x300 리사이징
-            image = Image.open(BytesIO(img_bytes))
-            resized_image = image.resize((500, 300), Image.Resampling.LANCZOS)
-            
-            # 최종 500x300 규격 이미지 파일로 저장
-            resized_image.save(img_path, "PNG")
-            
-            file_size = os.path.getsize(img_path)
-            print(f"✅ 유효한 500x300 이미지 저장 성공! (용량: {file_size} bytes)")
-            return True
-
-        except Exception as e:
-            print(f"⚠️ [{attempt}/{max_retries}] 이미지 생성 실패/지연: {e}")
-            if attempt < max_retries:
-                time.sleep(10) # 10초 대기 후 재시도
+            if img_ratio > target_ratio:
+                new_width = int(target_ratio * img.height)
+                offset = (img.width - new_width) // 2
+                crop_box = (offset, 0, offset + new_width, img.height)
             else:
-                print("❌ 모든 재시도 실패.")
+                new_height = int(img.width / target_ratio)
+                offset = (img.height - new_height) // 2
+                crop_box = (0, offset, img.width, offset + new_height)
 
-    # 3회 재시도 모두 실패 시: 깨진 더미(67byte)를 절대 남기지 않고 
-    # 완전히 깨끗한 단색 500x300 기본 배경 이미지를 안전하게 직접 생성
-    print("🛡️ 예외 안전장치 동작: 단색 500x300 대체 기술 이미지 자동 생성 중...")
-    fallback_img = Image.new("RGB", (500, 300), color=(30, 41, 59)) # 딥블루톤 배경
-    fallback_img.save(img_path, "PNG")
-    return False
+            cropped_img = img.crop(crop_box)
+            resized_img = cropped_img.resize((target_width, target_height), Image.Resampling.LANCZOS)
+            resized_img.save(img_path, "PNG")
 
-# 5. 프롬프트 정의 및 기술 문서 생성
+        # 임시 파일 삭제
+        if os.path.exists(temp_download_path):
+            os.remove(temp_download_path)
+
+        print(f"✅ 500x300 유효 이미지 생성 및 저장 완료: {img_path}")
+        return True
+
+    except Exception as e:
+        print(f"[경고] 이미지 생성 중 오류 발생: {e}")
+        if os.path.exists(temp_download_path):
+            os.remove(temp_download_path)
+            
+        # 67 Bytes 깨진 파일 대신 500x300 유효 그래픽 이미지 생성
+        create_fallback_image(img_path, category)
+        return False
+
+# 6. 프롬프트 정의 및 기술 포스팅 생성 (존댓말 제거)
 def generate_article(category):
     system_prompt = f"""
-너는 영상처리, 인공지능, 데이터 분석 분야의 수석 엔지니어이다.
-제시된 IT 핵심 기술 분야 중 하나를 선정하여 전문적인 기술 문서를 작성하라.
+너는 IT 분야 수석 엔지니어이다.
+주어진 주제에 맞춰 깊이 있는 기술 문서를 작성하라.
 
-[작성 포맷 및 어조 규칙]
-1. 존댓말(~해요, ~합니다)을 절대로 사용하지 말 것.
-2. 개조식 표현(~함, ~임) 또는 기술 서술용 평어/해라체(~다, ~한다)만 사용할 것.
-3. 문서 상단 Frontmatter 규격을 엄격히 준수할 것:
+[어조 및 스타일 규칙 - 엄격 준수]
+1. 존댓말(~해요, ~합니다, ~습니다)을 절대로 사용하지 말 것.
+2. 개조식 표현(~함, ~임) 또는 서술용 평어/해라체(~다, ~한다)만 사용할 것.
+
+[Frontmatter 규칙]
 ---
-title: "[기술명] 핵심 개념 및 검증된 실무 활용법"
+title: "[기술] {category} 핵심 원리 및 검증된 활용법"
 tags:
   - IT기술
-  - {category.split('(')[0].strip()}
-  - 기술분석
+  - {category.split()[0]}
+  - 엔지니어링
 header:
   teaser: /assets/images/{date_compact}/0_.png
 toc: true
@@ -122,19 +145,19 @@ toc_sticky: true
 excerpt_separator: <!--more-->
 ---
 
-[본문 필수 구성 요소]
-1. 개요 서술 후 즉시 `<!--more-->` 주석 배치.
-2. 기술의 개요 및 핵심 원리 설명.
-3. 본문 내 주제를 직관적으로 전달할 수 있는 이미지 매핑 포함: `![](/assets/images/{date_compact}/0_.png)`
-4. 검증된 사용 방법 (실제 동작 가능한 Python / PyTorch / OpenCV / Pandas 등의 코드 예제 및 적용 가이드 포함).
-5. 실제 실무 적용 시 고려해야 할 장단점 및 한계점 정리.
+[본문 필수 구조]
+1. 개요 서술 후 `<!--more-->` 주석 필수 삽입.
+2. 기술 개요 및 핵심 원리 설명.
+3. 본문 내 시각 자료 참조 삽입: `![](/assets/images/{date_compact}/0_.png)`
+4. 실무에서 검증된 코드 구현체(Python/PyTorch/Pandas 등)와 사용 가이드 작성.
+5. 적용 시 장단점 및 고려사항 명시.
 """
 
     user_prompt = f"""
 오늘 날짜: {date_dash}
-이번 포스팅 주제 분야: {category}
+주제: {category}
 
-해당 분야의 대표적인 핵심 기술 하나를 직접 선정한 후, 검증된 구현 코드 및 사용법을 포함하여 실무에 즉시 적용 가능한 깊이 있는 글을 작성하라.
+해당 분야의 핵심 기술을 선정하여 실무 중심의 기술 문서를 작성하라.
 """
 
     response = client.complete(
@@ -143,7 +166,7 @@ excerpt_separator: <!--more-->
             UserMessage(content=user_prompt),
         ],
         model="gpt-4o",
-        temperature=0.4,
+        temperature=0.3,
         max_tokens=3500
     )
     
@@ -162,12 +185,12 @@ def main():
     os.makedirs(posts_dir, exist_ok=True)
     os.makedirs(img_dir, exist_ok=True)
 
-    print(f"🎯 선정된 IT 핵심 분야: {selected_category}")
+    print(f"🎯 작성 주제: {selected_category}")
 
-    # 1. 티저 및 본문 이미지 생성 (assets/images/YYYYMMDD/0_.png)
+    # 1. 500x300 이미지 안전 생성 및 검증
     generate_and_save_image(img_dir, selected_category)
 
-    # 2. 기술 블로그 문서 생성 및 저장 (_posts/YYYY-MM-DD-YYYYMMDD.md)
+    # 2. 마크다운 포스트 파일 생성 (_posts/YYYY-MM-DD-YYYYMMDD.md)
     content = generate_article(selected_category)
     cleaned_content = clean_markdown_output(content)
     
@@ -176,7 +199,7 @@ def main():
     with open(filename, "w", encoding="utf-8") as f:
         f.write(cleaned_content)
         
-    print(f"✅ 포스팅 생성 완료: {filename}")
+    print(f"✅ 포스팅 생성 완벽 종료: {filename}")
 
 if __name__ == "__main__":
     main()
