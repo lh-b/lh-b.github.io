@@ -23,6 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install azure-ai-inference
+          pip install azure-ai-inference Pillow
 
       - name: Run Auto Post Generator
         env:
