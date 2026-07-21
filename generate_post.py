@@ -5,7 +5,7 @@ import random
 import urllib.request
 import urllib.parse
 from datetime import datetime, timezone, timedelta
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
@@ -15,6 +15,7 @@ KST = timezone(timedelta(hours=9))
 now = datetime.now(KST)
 date_dash = now.strftime("%Y-%m-%d")    # YYYY-MM-DD
 date_compact = now.strftime("%Y%m%d")   # YYYYMMDD
+date_full = now.strftime("%Y-%m-%d %H:%M:%S +0900") # 타임존 포함 날짜
 
 # 2. GitHub Models Client 설정
 token = os.environ.get("GH_MODELS_TOKEN")
@@ -28,9 +29,6 @@ client = ChatCompletionsClient(
 
 # 3. 최신 IT 동향 및 핵심 기술 주제를 동적으로 가져오는 함수
 def get_latest_tech_topic(client_instance):
-    """
-    LLM을 활용하여 현재 시점의 최신 IT 동향 및 핵심 소프트웨어 엔지니어링 주제를 동적으로 생성/선정합니다.
-    """
     fallback_categories = [
         "Agentic AI Systems & Multi-Agent Workflows",
         "Retrieval-Augmented Generation (RAG) & Vector Search",
@@ -73,27 +71,20 @@ def get_latest_tech_topic(client_instance):
     except Exception as e:
         print(f"[경고] 동적 주제 생성 중 오류 발생: {e}. 기본 예비 주제 목록에서 선택합니다.")
     
-    # 예외 발생 시 예비 목록에서 임의 선택
     return random.choice(fallback_categories)
 
 # 4. 예외 발생 시 대체 이미지를 만드는 함수
 def create_fallback_image(img_path, category_text):
     width, height = 500, 300
-    # 기술 블로그에 어울리는 다크 모드 배경
     img = Image.new('RGB', (width, height), color=(15, 23, 42))
     draw = ImageDraw.Draw(img)
-    
-    # 테두리 선 추가
     draw.rectangle([5, 5, width - 6, height - 6], outline=(56, 189, 248), width=2)
-    
-    # 텍스트 그리기 (기본 폰트 사용)
     text = f"Tech Topic:\n{category_text}"
     draw.text((30, 120), text, fill=(241, 245, 249))
-    
     img.save(img_path, "PNG")
     print(f"⚠️ 대체 이미지 생성 완료: {img_path}")
 
-# 5. Pollinations.ai (무료 Flux/SD 기반) API를 활용한 이미지 생성
+# 5. Pollinations.ai API를 활용한 이미지 생성
 def generate_and_save_image(img_dir, category):
     img_path = os.path.join(img_dir, "0_.png")
     temp_download_path = os.path.join(img_dir, "temp_raw.png")
@@ -101,7 +92,6 @@ def generate_and_save_image(img_dir, category):
     prompt = f"A high quality visual technical architecture diagram representing {category}, professional tech blog style, modern infographic with clean node graphs, dark background, vector art"
     encoded_prompt = urllib.parse.quote(prompt)
     
-    # Pollinations.ai 무료 API 엔드포인트 설정 (Flux 모델 활용)
     seed = random.randint(10000, 99999)
     image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1000&height=600&seed={seed}&nologo=true&model=flux"
     
@@ -111,15 +101,11 @@ def generate_and_save_image(img_dir, category):
             headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
         )
         
-        # 이미지 다운로드 (timeout 60초)
         with urllib.request.urlopen(req, timeout=60) as response, open(temp_download_path, 'wb') as out_file:
             out_file.write(response.read())
 
-        # Pillow를 이용하여 정확한 500x300 비율로 크롭 및 리사이징
         with Image.open(temp_download_path) as img:
             target_width, target_height = 500, 300
-            
-            # 비율 맞춤 계산
             img_ratio = img.width / img.height
             target_ratio = target_width / target_height
 
@@ -136,7 +122,6 @@ def generate_and_save_image(img_dir, category):
             resized_img = cropped_img.resize((target_width, target_height), Image.Resampling.LANCZOS)
             resized_img.save(img_path, "PNG")
 
-        # 임시 파일 삭제
         if os.path.exists(temp_download_path):
             os.remove(temp_download_path)
 
@@ -153,20 +138,25 @@ def generate_and_save_image(img_dir, category):
 
 # 6. 프롬프트 정의 및 기술 포스팅 생성 (존댓말 제거)
 def generate_article(category):
+    # YAML 특수문자 오류 방지를 위한 안전한 문자열 포매팅
+    safe_title = json.dumps(category, ensure_ascii=False)
+    first_tag = re.sub(r'[^a-zA-Z0-9]', '', category.split()[0])
+
     system_prompt = f"""
 너는 IT 분야 수석 엔지니어이다.
 주어진 주제에 맞춰 깊이 있는 기술 문서를 작성하라.
 
 [어조 및 스타일 규칙 - 엄격 준수]
-1. 존댓말(~해요, ~합니다, ~습니다)을 절대로 사용하지 말 것.
+1. 존댓말(~해요, ~합니다, ~습니 다)을 절대로 사용하지 말 것.
 2. 개조식 표현(~함, ~임) 또는 서술용 평어/해라체(~다, ~한다)만 사용할 것.
 
 [Frontmatter 규칙]
 ---
-title: "{category}"
+title: {safe_title}
+date: {date_full}
 tags:
   - IT Technology
-  - {category.split()[0]}
+  - {first_tag}
   - Engineering
 header:
   teaser: /assets/images/{date_compact}/0_.png
@@ -202,9 +192,19 @@ excerpt_separator: <!--more-->
     return response.choices[0].message.content
 
 def clean_markdown_output(text):
-    text = re.sub(r"^```markdown\s*", "", text, flags=re.MULTILINE)
-    text = re.sub(r"^```\s*", "", text, flags=re.MULTILINE)
-    text = re.sub(r"```$", "", text, flags=re.MULTILINE)
+    """
+    LLM 응답의 최외곽 ```markdown ... ``` 태그만 안전하게 제거하며,
+    본문 내부의 모든 코드 블록(```python 등)은 그대로 보존합니다.
+    """
+    text = text.strip()
+    if text.startswith("```markdown"):
+        text = text[11:].lstrip()
+    elif text.startswith("```"):
+        text = text[3:].lstrip()
+    
+    if text.endswith("```"):
+        text = text[:-3].rstrip()
+        
     return text.strip()
 
 def main():
@@ -214,19 +214,18 @@ def main():
     os.makedirs(posts_dir, exist_ok=True)
     os.makedirs(img_dir, exist_ok=True)
 
-    # 단순 random.choice 대신 LLM을 활용한 동적 최신 IT 주제 가져오기 실행
     selected_category = get_latest_tech_topic(client)
-
     print(f"🎯 최종 작성 주제: {selected_category}")
 
-    # 1. Pollinations API 기반 500x300 이미지 무료 생성
     generate_and_save_image(img_dir, selected_category)
 
-    # 2. 마크다운 포스트 파일 생성 (_posts/YYYY-MM-DD-YYYYMMDD.md)
     content = generate_article(selected_category)
     cleaned_content = clean_markdown_output(content)
     
-    filename = os.path.join(posts_dir, f"{date_dash}-{date_compact}.md")
+    # URL 및 파일명용 안전한 영문 슬러그(slug) 생성
+    slug = re.sub(r'[^a-zA-Z0-9]', '-', selected_category.lower())
+    slug = re.sub(r'-+', '-', slug).strip('-')[:40]
+    filename = os.path.join(posts_dir, f"{date_dash}-{slug}.md")
     
     with open(filename, "w", encoding="utf-8") as f:
         f.write(cleaned_content)
