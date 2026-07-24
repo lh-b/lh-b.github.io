@@ -4,6 +4,8 @@ import json
 import random
 import urllib.request
 import urllib.parse
+import base64
+import re
 from datetime import datetime, timezone, timedelta
 from PIL import Image, ImageDraw
 from azure.ai.inference import ChatCompletionsClient
@@ -49,6 +51,7 @@ def get_latest_tech_topic(client_instance):
 1. 단순 추상적/마케팅 용어가 아니라 실제 코드 및 기술 아키텍처로 구현 가능한 구체적인 엔지니어링 주제일 것.
 2. 영문 제목으로 명확하고 간결하게 출력할 것 (예: "Agentic Multi-Agent Workflows with LangGraph", "eBPF-driven Zero Trust Network Security").
 3. 따옴표, 설명, 번호 등의 부연 설명 없이 오직 '주제명 텍스트'만 단 한 줄로 출력할 것.
+4. 선택된 주제가 고급/차세대 개념인 경우, 범용적인 기초 예제(예: 기본 EC2 생성)가 아닌 해당 주제의 핵심을 직접 다루는 심화 코드(예: Redfish API, CXL resource pool, Kubernetes CRD 등)를 작성할 것.
 """
     user_prompt = f"오늘 날짜({date_dash}) 기준, 최근 IT 산업에서 가장 주목받고 가치 있는 고난도 기술 주제 1개를 선정해줘."
 
@@ -208,6 +211,23 @@ def clean_markdown_output(text):
         
     return text.strip()
 
+def convert_mermaid_to_image_tag(text):
+    """
+    ```mermaid ... ``` 코드를 mermaid.ink SVG 이미지 태그로 자동 변환합니다.
+    """
+    def replace_match(match):
+        mermaid_code = match.group(1).strip()
+        # Mermaid 문법을 Base64로 인코딩
+        encoded_bytes = base64.b64encode(mermaid_code.encode('utf-8'))
+        base64_str = encoded_bytes.decode('utf-8')
+        
+        image_url = f"https://mermaid.ink/svg/{base64_str}"
+        return f"![System Architecture]({image_url})"
+
+    # ```mermaid ... ``` 패턴 찾기
+    pattern = r"```mermaid\s*\n(.*?)```"
+    return re.sub(pattern, replace_match, text, flags=re.DOTALL)
+
 def main():
     posts_dir = "_posts"
     img_dir = f"assets/images/{date_compact}"
@@ -222,11 +242,12 @@ def main():
 
     content = generate_article(selected_category)
     cleaned_content = clean_markdown_output(content)
+    final_content = convert_mermaid_to_image_tag(cleaned_content)
     
     filename = os.path.join(posts_dir, f"{date_dash}-{date_compact}.md")
     
     with open(filename, "w", encoding="utf-8") as f:
-        f.write(cleaned_content)
+        f.write(final_content)
         
     print(f"✅ 포스팅 생성 완벽 종료: {filename}")
 
