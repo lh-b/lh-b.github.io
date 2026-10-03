@@ -2,10 +2,10 @@ import os
 import re
 import json
 import random
+import time
 import urllib.request
 import urllib.parse
 import base64
-import re
 from datetime import datetime, timezone, timedelta
 from PIL import Image, ImageDraw
 from azure.ai.inference import ChatCompletionsClient
@@ -28,6 +28,27 @@ client = ChatCompletionsClient(
     endpoint="https://models.inference.ai.azure.com",
     credential=AzureKeyCredential(token),
 )
+
+# 2-1. 네트워크 순단 및 DNS Resolution 오류 방어를 위한 재시도 래퍼
+def call_chat_completion_with_retry(client_instance, messages, model="gpt-4o", max_retries=4, initial_delay=3, **kwargs):
+    """
+    DNS 확인 실패([Errno -2]) 및 일시적 연결 장애 시 지수 백오프로 재시도하는 래퍼 함수
+    """
+    for attempt in range(1, max_retries + 1):
+        try:
+            return client_instance.complete(
+                messages=messages,
+                model=model,
+                **kwargs
+            )
+        except Exception as e:
+            print(f"[시도 {attempt}/{max_retries}] API 호출 중 에러 발생: {e}")
+            if attempt == max_retries:
+                raise RuntimeError(f"최대 재시도 횟수({max_retries}회)를 초과하여 API 호출에 실패했습니다: {e}") from e
+            
+            sleep_sec = initial_delay * (2 ** (attempt - 1))
+            print(f"⏳ {sleep_sec}초 후 다시 시도합니다...")
+            time.sleep(sleep_sec)
 
 # 3. 최신 IT 동향 및 핵심 기술 주제를 동적으로 가져오는 함수
 def get_latest_tech_topic(client_instance):
@@ -56,14 +77,17 @@ def get_latest_tech_topic(client_instance):
     user_prompt = f"오늘 날짜({date_dash}) 기준, 최근 IT 산업에서 가장 주목받고 가치 있는 고난도 기술 주제 1개를 선정해줘."
 
     try:
-        response = client_instance.complete(
+        response = call_chat_completion_with_retry(
+            client_instance,
             messages=[
                 SystemMessage(content=system_prompt),
                 UserMessage(content=user_prompt),
             ],
             model="gpt-4o",
             temperature=0.7,
-            max_tokens=100
+            max_tokens=100,
+            max_retries=3,
+            initial_delay=2
         )
         
         topic = response.choices[0].message.content.strip().strip('"').strip("'")
@@ -72,7 +96,7 @@ def get_latest_tech_topic(client_instance):
             return topic
             
     except Exception as e:
-        print(f"[경고] 동적 주제 생성 중 오류 발생: {e}. 기본 예비 주제 목록에서 선택합니다.")
+        print(f"[경고] 동적 주제 생성 실패({e}). 기본 예비 목록에서 임의 선택합니다.")
     
     return random.choice(fallback_categories)
 
@@ -85,7 +109,7 @@ def create_fallback_image(img_path, category_text):
     text = f"Tech Topic:\n{category_text}"
     draw.text((30, 120), text, fill=(241, 245, 249))
     img.save(img_path, "PNG")
-    print(f"⚠️ 대체 이미지 생성 완료: {img_path}")
+    print(f"⚠️️ 대체 이미지 생성 완료: {img_path}")
 
 # 5. Pollinations.ai API를 활용한 이미지 생성
 def generate_and_save_image(img_dir, category):
@@ -141,7 +165,6 @@ def generate_and_save_image(img_dir, category):
 
 # 6. 프롬프트 정의 및 기술 포스팅 생성 (존댓말 제거)
 def generate_article(category):
-    # YAML 특수문자 오류 방지를 위한 안전한 문자열 포매팅
     safe_title = json.dumps(category, ensure_ascii=False)
     first_tag = re.sub(r'[^a-zA-Z0-9]', '', category.split()[0])
 
@@ -150,7 +173,7 @@ def generate_article(category):
 주어진 주제에 맞춰 깊이 있는 기술 문서를 작성하라.
 
 [어조 및 스타일 규칙 - 엄격 준수]
-1. 존댓말(~해요, ~합니다, ~습니 다)을 절대로 사용하지 말 것.
+1. 존댓말(~해요, ~합니다, ~습니다)을 절대로 사용하지 말 것.
 2. 개조식 표현(~함, ~임) 또는 서술용 평어/해라체(~다, ~한다)만 사용할 것.
 
 [Frontmatter 규칙]
@@ -183,23 +206,22 @@ excerpt_separator: <!--more-->
 해당 분야의 핵심 기술을 선정하여 실무 중심의 기술 문서를 작성하라.
 """
 
-    response = client.complete(
+    response = call_chat_completion_with_retry(
+        client,
         messages=[
             SystemMessage(content=system_prompt),
             UserMessage(content=user_prompt),
         ],
         model="gpt-4o",
         temperature=0.3,
-        max_tokens=3500
+        max_tokens=3500,
+        max_retries=4,
+        initial_delay=3
     )
     
     return response.choices[0].message.content
 
 def clean_markdown_output(text):
-    """
-    LLM 응답의 최외곽 ```markdown ... ``` 태그만 안전하게 제거하며,
-    본문 내부의 모든 코드 블록(```python 등)은 그대로 보존합니다.
-    """
     text = text.strip()
     if text.startswith("```markdown"):
         text = text[11:].lstrip()
@@ -212,19 +234,14 @@ def clean_markdown_output(text):
     return text.strip()
 
 def convert_mermaid_to_image_tag(text):
-    """
-    ```mermaid ... ``` 코드를 mermaid.ink SVG 이미지 태그로 자동 변환합니다.
-    """
     def replace_match(match):
         mermaid_code = match.group(1).strip()
-        # Mermaid 문법을 Base64로 인코딩
         encoded_bytes = base64.b64encode(mermaid_code.encode('utf-8'))
         base64_str = encoded_bytes.decode('utf-8')
         
         image_url = f"https://mermaid.ink/svg/{base64_str}"
         return f"![System Architecture]({image_url})"
 
-    # ```mermaid ... ``` 패턴 찾기
     pattern = r"```mermaid\s*\n(.*?)```"
     return re.sub(pattern, replace_match, text, flags=re.DOTALL)
 
