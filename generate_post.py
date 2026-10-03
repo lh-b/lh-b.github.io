@@ -8,9 +8,7 @@ import urllib.parse
 import base64
 from datetime import datetime, timezone, timedelta
 from PIL import Image, ImageDraw
-from azure.ai.inference import ChatCompletionsClient
-from azure.ai.inference.models import SystemMessage, UserMessage
-from azure.core.credentials import AzureKeyCredential
+from openai import OpenAI
 
 # 1. 한국 시간대(KST = UTC+9) 및 날짜 포맷 설정
 KST = timezone(timedelta(hours=9))
@@ -19,24 +17,24 @@ date_dash = now.strftime("%Y-%m-%d")    # YYYY-MM-DD
 date_compact = now.strftime("%Y%m%d")   # YYYYMMDD
 date_full = now.strftime("%Y-%m-%d %H:%M:%S +0900") # 타임존 포함 날짜
 
-# 2. GitHub Models Client 설정
+# 2. GitHub Models (OpenAI 호환) Client 설정
 token = os.environ.get("GH_MODELS_TOKEN")
 if not token:
     raise ValueError("GH_MODELS_TOKEN 환경 변수가 설정되지 않았습니다.")
 
-client = ChatCompletionsClient(
-    endpoint="https://models.inference.ai.azure.com",
-    credential=AzureKeyCredential(token),
+client = OpenAI(
+    base_url="https://models.inference.ai.azure.com",
+    api_key=token,
 )
 
-# 2-1. 네트워크 순단 및 DNS Resolution 오류 방어를 위한 재시도 래퍼
+# 2-1. 네트워크 순단 및 DNS 오류 방어를 위한 재시도 래퍼
 def call_chat_completion_with_retry(client_instance, messages, model="gpt-4o", max_retries=4, initial_delay=3, **kwargs):
     """
-    DNS 확인 실패([Errno -2]) 및 일시적 연결 장애 시 지수 백오프로 재시도하는 래퍼 함수
+    DNS 확인 실패 및 일시적 연결 장애 시 지수 백오프로 재시도하는 래퍼 함수
     """
     for attempt in range(1, max_retries + 1):
         try:
-            return client_instance.complete(
+            return client_instance.chat.completions.create(
                 messages=messages,
                 model=model,
                 **kwargs
@@ -80,8 +78,8 @@ def get_latest_tech_topic(client_instance):
         response = call_chat_completion_with_retry(
             client_instance,
             messages=[
-                SystemMessage(content=system_prompt),
-                UserMessage(content=user_prompt),
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
             ],
             model="gpt-4o",
             temperature=0.7,
@@ -109,7 +107,7 @@ def create_fallback_image(img_path, category_text):
     text = f"Tech Topic:\n{category_text}"
     draw.text((30, 120), text, fill=(241, 245, 249))
     img.save(img_path, "PNG")
-    print(f"⚠️️ 대체 이미지 생성 완료: {img_path}")
+    print(f"⚠️ 대체 이미지 생성 완료: {img_path}")
 
 # 5. Pollinations.ai API를 활용한 이미지 생성
 def generate_and_save_image(img_dir, category):
@@ -209,8 +207,8 @@ excerpt_separator: <!--more-->
     response = call_chat_completion_with_retry(
         client,
         messages=[
-            SystemMessage(content=system_prompt),
-            UserMessage(content=user_prompt),
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
         ],
         model="gpt-4o",
         temperature=0.3,
