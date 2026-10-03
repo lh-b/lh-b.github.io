@@ -3,7 +3,6 @@ import re
 import json
 import random
 import time
-import socket
 import urllib.request
 import urllib.parse
 import base64
@@ -11,53 +10,14 @@ from datetime import datetime, timezone, timedelta
 from PIL import Image, ImageDraw
 from openai import OpenAI
 
-# ----------------------------------------------------
-# 0. DNS 강제 우회 패치 (GitHub Actions [Errno -2] 해결)
-# ----------------------------------------------------
-def patch_dns_if_needed():
-    """
-    러너 환경의 로컬 DNS 해석 실패를 방어하기 위해
-    Google DNS-over-HTTPS(DoH)를 통해 IP를 직접 조회하여 socket에 매핑합니다.
-    """
-    domains = ["models.github.ai", "models.inference.ai.azure.com"]
-    ip_map = {}
-    
-    for domain in domains:
-        try:
-            url = f"https://dns.google/resolve?name={domain}&type=A"
-            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-            with urllib.request.urlopen(req, timeout=5) as res:
-                data = json.loads(res.read().decode())
-                ips = [ans["data"] for ans in data.get("Answer", []) if ans.get("type") == 1]
-                if ips:
-                    ip_map[domain] = ips[0]
-                    print(f"🌐 [DNS Resolved] {domain} -> {ips[0]}")
-        except Exception as e:
-            print(f"⚠️ [DNS 패치 스킵] {domain} 조회 실패: {e}")
-
-    if ip_map:
-        orig_getaddrinfo = socket.getaddrinfo
-        def custom_getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
-            if host in ip_map:
-                return orig_getaddrinfo(ip_map[host], port, family, type, proto, flags)
-            return orig_getaddrinfo(host, port, family, type, proto, flags)
-        socket.getaddrinfo = custom_getaddrinfo
-
-# DNS 패치 적용
-patch_dns_if_needed()
-
-# ----------------------------------------------------
 # 1. 한국 시간대(KST = UTC+9) 및 날짜 포맷 설정
-# ----------------------------------------------------
 KST = timezone(timedelta(hours=9))
 now = datetime.now(KST)
 date_dash = now.strftime("%Y-%m-%d")    # YYYY-MM-DD
 date_compact = now.strftime("%Y%m%d")   # YYYYMMDD
 date_full = now.strftime("%Y-%m-%d %H:%M:%S +0900") # 타임존 포함 날짜
 
-# ----------------------------------------------------
 # 2. GitHub Models (OpenAI 호환) Client 설정
-# ----------------------------------------------------
 token = os.environ.get("GH_MODELS_TOKEN")
 if not token:
     raise ValueError("GH_MODELS_TOKEN 환경 변수가 설정되지 않았습니다.")
@@ -75,11 +35,19 @@ def call_chat_completion_with_retry(client_instance, messages, model="gpt-4o", m
     """
     for attempt in range(1, max_retries + 1):
         try:
-            return client_instance.chat.completions.create(
+            response = client_instance.chat.completions.create(
                 messages=messages,
                 model=model,
                 **kwargs
             )
+            # OpenAI ChatCompletion 객체에서 텍스트 안전하게 추출
+            if hasattr(response, "choices") and len(response.choices) > 0:
+                return response.choices[0].message.content
+            elif isinstance(response, str):
+                return response
+            else:
+                raise ValueError(f"예상치 못한 응답 형식입니다: {type(response)}")
+
         except Exception as e:
             print(f"[시도 {attempt}/{max_retries}] API 호출 중 에러 발생: {e}")
             if attempt == max_retries:
@@ -89,9 +57,7 @@ def call_chat_completion_with_retry(client_instance, messages, model="gpt-4o", m
             print(f"⏳ {sleep_sec}초 후 다시 시도합니다...")
             time.sleep(sleep_sec)
 
-# ----------------------------------------------------
 # 3. 최신 IT 동향 및 핵심 기술 주제를 동적으로 가져오는 함수
-# ----------------------------------------------------
 def get_latest_tech_topic(client_instance):
     fallback_categories = [
         "Agentic AI Systems & Multi-Agent Workflows",
@@ -118,7 +84,7 @@ def get_latest_tech_topic(client_instance):
     user_prompt = f"오늘 날짜({date_dash}) 기준, 최근 IT 산업에서 가장 주목받고 가치 있는 고난도 기술 주제 1개를 선정해줘."
 
     try:
-        response = call_chat_completion_with_retry(
+        content = call_chat_completion_with_retry(
             client_instance,
             messages=[
                 {"role": "system", "content": system_prompt},
@@ -131,7 +97,7 @@ def get_latest_tech_topic(client_instance):
             initial_delay=2
         )
         
-        topic = response.choices[0].message.content.strip().strip('"').strip("'")
+        topic = content.strip().strip('"').strip("'")
         if topic:
             print(f"✨ 동적 생성된 최신 IT 주제: {topic}")
             return topic
@@ -141,9 +107,7 @@ def get_latest_tech_topic(client_instance):
     
     return random.choice(fallback_categories)
 
-# ----------------------------------------------------
 # 4. 예외 발생 시 대체 이미지를 만드는 함수
-# ----------------------------------------------------
 def create_fallback_image(img_path, category_text):
     width, height = 500, 300
     img = Image.new('RGB', (width, height), color=(15, 23, 42))
@@ -154,9 +118,7 @@ def create_fallback_image(img_path, category_text):
     img.save(img_path, "PNG")
     print(f"⚠️ 대체 이미지 생성 완료: {img_path}")
 
-# ----------------------------------------------------
 # 5. Pollinations.ai API를 활용한 이미지 생성
-# ----------------------------------------------------
 def generate_and_save_image(img_dir, category):
     img_path = os.path.join(img_dir, "0_.png")
     temp_download_path = os.path.join(img_dir, "temp_raw.png")
@@ -208,9 +170,7 @@ def generate_and_save_image(img_dir, category):
         create_fallback_image(img_path, category)
         return False
 
-# ----------------------------------------------------
-# 6. 기술 포스팅 생성
-# ----------------------------------------------------
+# 6. 프롬프트 정의 및 기술 포스팅 생성
 def generate_article(category):
     safe_title = json.dumps(category, ensure_ascii=False)
     first_tag = re.sub(r'[^a-zA-Z0-9]', '', category.split()[0])
@@ -253,7 +213,7 @@ excerpt_separator: <!--more-->
 해당 분야의 핵심 기술을 선정하여 실무 중심의 기술 문서를 작성하라.
 """
 
-    response = call_chat_completion_with_retry(
+    content = call_chat_completion_with_retry(
         client,
         messages=[
             {"role": "system", "content": system_prompt},
@@ -266,7 +226,7 @@ excerpt_separator: <!--more-->
         initial_delay=3
     )
     
-    return response.choices[0].message.content
+    return content
 
 def clean_markdown_output(text):
     text = text.strip()
@@ -292,9 +252,7 @@ def convert_mermaid_to_image_tag(text):
     pattern = r"```mermaid\s*\n(.*?)```"
     return re.sub(pattern, replace_match, text, flags=re.DOTALL)
 
-# ----------------------------------------------------
 # 7. 엔트리포인트 실행
-# ----------------------------------------------------
 def main():
     posts_dir = "_posts"
     img_dir = f"assets/images/{date_compact}"
