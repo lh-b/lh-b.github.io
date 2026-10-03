@@ -22,16 +22,16 @@ token = os.environ.get("GH_MODELS_TOKEN")
 if not token:
     raise ValueError("GH_MODELS_TOKEN 환경 변수가 설정되지 않았습니다.")
 
-# GitHub Models 정식 엔드포인트
 client = OpenAI(
     base_url="https://models.github.ai/inference",
     api_key=token,
 )
 
-# 2-1. 네트워크 순단 방어용 재시도 래퍼
-def call_chat_completion_with_retry(client_instance, messages, model="gpt-4o", max_retries=4, initial_delay=3, **kwargs):
+# 2-1. 안전한 Chat Completion 호출 및 응답 텍스트 검증 래퍼
+def call_chat_completion_with_retry(client_instance, messages, model="gpt-4o", min_len=20, max_retries=4, initial_delay=3, **kwargs):
     """
-    네트워크 일시 오류 시 지수 백오프로 재시도하는 래퍼 함수
+    OpenAI 응답에서 실제 content 문자열을 안전하게 추출하며,
+    'OK' 등 비정상 단문 응답이 반환될 경우 재시도합니다.
     """
     for attempt in range(1, max_retries + 1):
         try:
@@ -40,18 +40,26 @@ def call_chat_completion_with_retry(client_instance, messages, model="gpt-4o", m
                 model=model,
                 **kwargs
             )
-            # OpenAI ChatCompletion 객체에서 텍스트 안전하게 추출
+            
+            # 응답 객체 파싱
+            content = None
             if hasattr(response, "choices") and len(response.choices) > 0:
-                return response.choices[0].message.content
+                choice = response.choices[0]
+                if hasattr(choice, "message") and hasattr(choice.message, "content"):
+                    content = choice.message.content
             elif isinstance(response, str):
-                return response
-            else:
-                raise ValueError(f"예상치 못한 응답 형식입니다: {type(response)}")
+                content = response
+            
+            # 유효성 검증 ('OK' 또는 공백 응답 필터링)
+            if not content or len(content.strip()) < min_len or content.strip().upper() == "OK":
+                raise ValueError(f"비정상 응답 수신 (내용: '{content}')")
+            
+            return content.strip()
 
         except Exception as e:
             print(f"[시도 {attempt}/{max_retries}] API 호출 중 에러 발생: {e}")
             if attempt == max_retries:
-                raise RuntimeError(f"최대 재시도 횟수({max_retries}회)를 초과하여 API 호출에 실패했습니다: {e}") from e
+                raise RuntimeError(f"최대 재시도 횟수({max_retries}회) 초과: {e}") from e
             
             sleep_sec = initial_delay * (2 ** (attempt - 1))
             print(f"⏳ {sleep_sec}초 후 다시 시도합니다...")
@@ -93,12 +101,13 @@ def get_latest_tech_topic(client_instance):
             model="gpt-4o",
             temperature=0.7,
             max_tokens=100,
+            min_len=5,
             max_retries=3,
             initial_delay=2
         )
         
         topic = content.strip().strip('"').strip("'")
-        if topic:
+        if topic and topic.upper() != "OK":
             print(f"✨ 동적 생성된 최신 IT 주제: {topic}")
             return topic
             
@@ -170,7 +179,7 @@ def generate_and_save_image(img_dir, category):
         create_fallback_image(img_path, category)
         return False
 
-# 6. 프롬프트 정의 및 기술 포스팅 생성
+# 6. 기술 포스팅 생성
 def generate_article(category):
     safe_title = json.dumps(category, ensure_ascii=False)
     first_tag = re.sub(r'[^a-zA-Z0-9]', '', category.split()[0])
@@ -213,6 +222,7 @@ excerpt_separator: <!--more-->
 해당 분야의 핵심 기술을 선정하여 실무 중심의 기술 문서를 작성하라.
 """
 
+    # 최소 300자 이상의 본문이 수신되어야 정상 통과
     content = call_chat_completion_with_retry(
         client,
         messages=[
@@ -222,6 +232,7 @@ excerpt_separator: <!--more-->
         model="gpt-4o",
         temperature=0.3,
         max_tokens=3500,
+        min_len=300,
         max_retries=4,
         initial_delay=3
     )
@@ -252,7 +263,7 @@ def convert_mermaid_to_image_tag(text):
     pattern = r"```mermaid\s*\n(.*?)```"
     return re.sub(pattern, replace_match, text, flags=re.DOTALL)
 
-# 7. 엔트리포인트 실행
+# 7. 메인 실행 함수
 def main():
     posts_dir = "_posts"
     img_dir = f"assets/images/{date_compact}"
@@ -269,12 +280,16 @@ def main():
     cleaned_content = clean_markdown_output(content)
     final_content = convert_mermaid_to_image_tag(cleaned_content)
     
+    # 최종 본문 유효성 검사 (OK 또는 비정상적인 단문 방지)
+    if len(final_content.strip()) < 100 or "---" not in final_content:
+        raise ValueError(f"생성된 포스팅 내용이 유효하지 않습니다 (길이: {len(final_content)}자). 저장을 중단합니다.")
+
     filename = os.path.join(posts_dir, f"{date_dash}-{date_compact}.md")
     
     with open(filename, "w", encoding="utf-8") as f:
         f.write(final_content)
         
-    print(f"✅ 포스팅 생성 완벽 종료: {filename}")
+    print(f"✅ 포스팅 생성 완벽 종료 ({len(final_content)}자 저장됨): {filename}")
 
 if __name__ == "__main__":
     main()
