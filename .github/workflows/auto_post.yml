@@ -24,6 +24,11 @@ jobs:
         run: |
           pip install openai pillow
 
+      - name: Configure Public DNS
+        run: |
+          sudo bash -c 'echo -e "nameserver 8.8.8.8\nnameserver 1.1.1.1" > /etc/resolv.conf'
+          nslookup models.inference.ai.azure.com || true
+          
       - name: Run Auto Post Generator
         env:
           GH_MODELS_TOKEN: ${{ secrets.GH_MODELS_TOKEN }}
