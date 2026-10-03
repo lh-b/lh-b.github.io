@@ -26,8 +26,19 @@ jobs:
 
       - name: Configure Public DNS
         run: |
-          sudo bash -c 'echo -e "nameserver 8.8.8.8\nnameserver 1.1.1.1" > /etc/resolv.conf'
-          nslookup models.inference.ai.azure.com || true
+          # 1. systemd-resolved 비활성화 및 기존 symlink 해제
+          sudo systemctl stop systemd-resolved || true
+          sudo rm -f /etc/resolv.conf
+          
+          # 2. 공용 네임서버 직접 생성
+          sudo bash -c 'cat << EOF > /etc/resolv.conf
+          nameserver 8.8.8.8
+          nameserver 1.1.1.1
+          options timeout:2 attempts:3
+          EOF'
+          
+          # 3. 도메인 해석 확인 (디버깅용)
+          getent hosts models.inference.ai.azure.com || nslookup models.inference.ai.azure.com || true
           
       - name: Run Auto Post Generator
         env:
