@@ -3,6 +3,7 @@ import re
 import json
 import random
 import time
+import socket
 import urllib.request
 import urllib.parse
 import urllib.error
@@ -10,77 +11,133 @@ import base64
 from datetime import datetime, timezone, timedelta
 from PIL import Image, ImageDraw
 
+# ====================================================
+# 0. DoH 기반 DNS 자동 우회 (Errno -2 원천 차단)
+# ====================================================
+def resolve_ip_via_doh(hostname):
+    """
+    러너의 로컬 DNS가 CNAME 해석에 실패할 경우
+    Google/Cloudflare DoH(HTTPS DNS)를 통해 IPv4 A 레코드를 직접 가져옵니다.
+    """
+    # 1. 로컬 DNS 시도
+    try:
+        res = socket.getaddrinfo(hostname, 443, socket.AF_INET, socket.SOCK_STREAM)
+        if res:
+            return res[0][4][0]
+    except Exception:
+        pass
+
+    # 2. DoH 서비스 조회
+    doh_endpoints = [
+        f"https://dns.google/resolve?name={hostname}&type=A",
+        f"https://cloudflare-dns.com/dns-query?name={hostname}&type=A"
+    ]
+    
+    for url in doh_endpoints:
+        try:
+            req = urllib.request.Request(
+                url,
+                headers={"Accept": "application/dns-json", "User-Agent": "Mozilla/5.0"}
+            )
+            with urllib.request.urlopen(req, timeout=5) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+                if data.get("Status") == 0 and "Answer" in data:
+                    # A 레코드 검색
+                    for ans in data["Answer"]:
+                        if ans.get("type") == 1:
+                            return ans["data"]
+                    # CNAME만 존재할 경우 대상 호스트 재귀 조회
+                    for ans in data["Answer"]:
+                        if ans.get("type") == 5:
+                            cname_target = ans["data"].rstrip(".")
+                            sub_ip = resolve_ip_via_doh(cname_target)
+                            if sub_ip:
+                                return sub_ip
+        except Exception:
+            continue
+
+    # 3. Azure Front Door 글로벌 Anycast IP Fallback
+    return "13.107.246.40"
+
+TARGET_HOST = "models.inference.ai.azure.com"
+resolved_ip = resolve_ip_via_doh(TARGET_HOST)
+print(f"🌐 [DNS 매핑 완료] {TARGET_HOST} -> {resolved_ip}")
+
+# socket.getaddrinfo 가로채기 적용
+orig_getaddrinfo = socket.getaddrinfo
+def patched_getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
+    if host == TARGET_HOST:
+        p = int(port) if port else 443
+        return [(socket.AF_INET, socket.SOCK_STREAM, 6, '', (resolved_ip, p))]
+    return orig_getaddrinfo(host, port, family, type, proto, flags)
+
+socket.getaddrinfo = patched_getaddrinfo
+
+# ====================================================
 # 1. 한국 시간대(KST = UTC+9) 및 날짜 포맷 설정
+# ====================================================
 KST = timezone(timedelta(hours=9))
 now = datetime.now(KST)
 date_dash = now.strftime("%Y-%m-%d")    # YYYY-MM-DD
 date_compact = now.strftime("%Y%m%d")   # YYYYMMDD
-date_full = now.strftime("%Y-%m-%d %H:%M:%S +0900") # 타임존 포함 날짜
+date_full = now.strftime("%Y-%m-%d %H:%M:%S +0900")
 
-# 2. 토큰 검증
+# ====================================================
+# 2. 토큰 및 REST API 통신 로직
+# ====================================================
 token = os.environ.get("GH_MODELS_TOKEN")
 if not token:
     raise ValueError("GH_MODELS_TOKEN 환경 변수가 설정되지 않았습니다.")
 
-# 2-1. GitHub Models 직접 호출 함수 (SDK 미사용, 순수 REST API)
-def query_github_models(messages, model="gpt-4o", temperature=0.7, max_tokens=1000, max_retries=3):
-    """
-    OpenAI SDK 호환성 문제 및 'OK' 텍스트 반환 버그를 방지하기 위해
-    GitHub Models API 규격에 맞춰 직접 HTTP POST 호출을 수행합니다.
-    """
-    # 1순위: GitHub Models 표준 엔드포인트, 2순위: 대체 엔드포인트
-    endpoints = [
-        "https://models.inference.ai.azure.com/chat/completions",
-        "https://models.github.ai/inference/chat/completions"
-    ]
-    
+def query_github_models(messages, model="gpt-4o", temperature=0.7, max_tokens=1000, max_retries=4):
+    url = f"https://{TARGET_HOST}/chat/completions"
     payload = {
         "messages": messages,
         "model": model,
         "temperature": temperature,
         "max_tokens": max_tokens
     }
-    json_data = json.dumps(payload).encode("utf-8")
-    
+    json_bytes = json.dumps(payload).encode("utf-8")
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {token}",
+        "User-Agent": "GitHubAction-PostGenerator/1.0"
+    }
+
     for attempt in range(1, max_retries + 1):
-        for endpoint in endpoints:
-            try:
-                req = urllib.request.Request(
-                    endpoint,
-                    data=json_data,
-                    headers={
-                        "Content-Type": "application/json",
-                        "Authorization": f"Bearer {token}",
-                        "User-Agent": "GitHubAction-PostGenerator/1.0"
-                    }
-                )
+        try:
+            req = urllib.request.Request(url, data=json_bytes, headers=headers, method="POST")
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                raw_body = resp.read().decode("utf-8")
                 
-                with urllib.request.urlopen(req, timeout=90) as response:
-                    res_body = response.read().decode("utf-8")
-                    
-                    # 단순 상태 텍스트("OK") 필터링
-                    if res_body.strip().upper() == "OK":
-                        continue
-                    
-                    parsed = json.loads(res_body)
-                    if "choices" in parsed and len(parsed["choices"]) > 0:
-                        content = parsed["choices"][0]["message"]["content"]
-                        if content and content.strip().upper() != "OK":
-                            return content.strip()
+                if not raw_body or raw_body.strip().upper() == "OK":
+                    raise ValueError(f"비정상 응답: '{raw_body}'")
 
-            except urllib.error.HTTPError as http_err:
-                err_detail = http_err.read().decode("utf-8", errors="ignore")
-                print(f"[HTTP 오류 {http_err.code}] {endpoint}: {err_detail[:150]}")
-            except Exception as e:
-                print(f"[{endpoint} 호출 실패]: {e}")
+                parsed = json.loads(raw_body)
+                if "choices" in parsed and len(parsed["choices"]) > 0:
+                    content = parsed["choices"][0].get("message", {}).get("content", "")
+                    if content and len(content.strip()) > 5:
+                        return content.strip()
+                raise ValueError("응답 내 본문 데이터(content) 누락")
 
-        sleep_sec = attempt * 3
-        print(f"⏳ {sleep_sec}초 후 API 재시도 ({attempt}/{max_retries})...")
-        time.sleep(sleep_sec)
+        except urllib.error.HTTPError as http_err:
+            err_msg = http_err.read().decode("utf-8", errors="ignore")
+            print(f"[시도 {attempt}/{max_retries}] HTTP 오류 {http_err.code}: {err_msg[:200]}")
+            if http_err.code == 401:
+                raise RuntimeError("GH_MODELS_TOKEN 인증 실패(401). 토큰 유효성/권한을 확인하세요.") from http_err
+        except Exception as e:
+            print(f"[시도 {attempt}/{max_retries}] API 요청 실패: {e}")
 
-    raise RuntimeError("모든 엔드포인트에서 유효한 응답을 수신하지 못했습니다.")
+        if attempt < max_retries:
+            wait_sec = attempt * 4
+            print(f"⏳ {wait_sec}초 후 재시도합니다...")
+            time.sleep(wait_sec)
 
-# 3. 최신 IT 동향 및 핵심 기술 주제를 동적으로 가져오는 함수
+    raise RuntimeError(f"최대 재시도 횟수({max_retries}회)를 초과하여 API 응답을 받지 못했습니다.")
+
+# ====================================================
+# 3. 최신 IT 주제 동적 선정
+# ====================================================
 def get_latest_tech_topic():
     fallback_categories = [
         "Agentic AI Systems & Multi-Agent Workflows",
@@ -127,7 +184,9 @@ def get_latest_tech_topic():
     
     return random.choice(fallback_categories)
 
-# 4. 예외 발생 시 대체 이미지를 만드는 함수
+# ====================================================
+# 4. 이미지 생성 및 대체 이미지 처리
+# ====================================================
 def create_fallback_image(img_path, category_text):
     width, height = 500, 300
     img = Image.new('RGB', (width, height), color=(15, 23, 42))
@@ -138,14 +197,12 @@ def create_fallback_image(img_path, category_text):
     img.save(img_path, "PNG")
     print(f"⚠️ 대체 이미지 생성 완료: {img_path}")
 
-# 5. Pollinations.ai API를 활용한 이미지 생성
 def generate_and_save_image(img_dir, category):
     img_path = os.path.join(img_dir, "0_.png")
     temp_download_path = os.path.join(img_dir, "temp_raw.png")
     
     prompt = f"A high quality visual technical architecture diagram representing {category}, professional tech blog style, modern infographic with clean node graphs, dark background, vector art"
     encoded_prompt = urllib.parse.quote(prompt)
-    
     seed = random.randint(10000, 99999)
     image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1000&height=600&seed={seed}&nologo=true&model=flux"
     
@@ -179,7 +236,7 @@ def generate_and_save_image(img_dir, category):
         if os.path.exists(temp_download_path):
             os.remove(temp_download_path)
 
-        print(f"✅ 무료 AI 이미지 생성 및 500x300 저장 완료: {img_path}")
+        print(f"✅ AI 이미지 생성 및 저장 완료: {img_path}")
         return True
 
     except Exception as e:
@@ -190,7 +247,9 @@ def generate_and_save_image(img_dir, category):
         create_fallback_image(img_path, category)
         return False
 
-# 6. 기술 포스팅 생성
+# ====================================================
+# 5. 기술 포스팅 생성
+# ====================================================
 def generate_article(category):
     safe_title = json.dumps(category, ensure_ascii=False)
     first_tag = re.sub(r'[^a-zA-Z0-9]', '', category.split()[0])
@@ -263,14 +322,15 @@ def convert_mermaid_to_image_tag(text):
         mermaid_code = match.group(1).strip()
         encoded_bytes = base64.b64encode(mermaid_code.encode('utf-8'))
         base64_str = encoded_bytes.decode('utf-8')
-        
         image_url = f"https://mermaid.ink/svg/{base64_str}"
         return f"![System Architecture]({image_url})"
 
     pattern = r"```mermaid\s*\n(.*?)```"
     return re.sub(pattern, replace_match, text, flags=re.DOTALL)
 
-# 7. 엔트리포인트 실행
+# ====================================================
+# 6. 메인 실행부
+# ====================================================
 def main():
     posts_dir = "_posts"
     img_dir = f"assets/images/{date_compact}"
@@ -288,7 +348,7 @@ def main():
     final_content = convert_mermaid_to_image_tag(cleaned_content)
     
     if len(final_content.strip()) < 100 or "---" not in final_content:
-        raise ValueError(f"유효하지 않은 본문 내용입니다 ({len(final_content)}자). 저장을 취소합니다.")
+        raise ValueError(f"생성된 포스팅 내용이 유효하지 않습니다 ({len(final_content)}자). 저장을 취소합니다.")
 
     filename = os.path.join(posts_dir, f"{date_dash}-{date_compact}.md")
     
