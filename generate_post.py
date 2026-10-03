@@ -3,7 +3,7 @@ import re
 import json
 import random
 import time
-import socket
+import subprocess
 import urllib.request
 import urllib.parse
 import urllib.error
@@ -12,66 +12,31 @@ from datetime import datetime, timezone, timedelta
 from PIL import Image, ImageDraw
 
 # ====================================================
-# 0. DoH 기반 DNS 자동 우회 (Errno -2 원천 차단)
+# 0. GitHub Actions 러너 DNS 리졸버 자동 복구
 # ====================================================
-def resolve_ip_via_doh(hostname):
+def fix_runner_dns():
     """
-    러너의 로컬 DNS가 CNAME 해석에 실패할 경우
-    Google/Cloudflare DoH(HTTPS DNS)를 통해 IPv4 A 레코드를 직접 가져옵니다.
+    Ubuntu 러너의 systemd-resolved CNAME 버그를 우회하기 위해
+    Azure VM의 공식 내부 DNS(168.63.129.16)로 네임서버를 교체합니다.
     """
-    # 1. 로컬 DNS 시도
     try:
-        res = socket.getaddrinfo(hostname, 443, socket.AF_INET, socket.SOCK_STREAM)
-        if res:
-            return res[0][4][0]
-    except Exception:
-        pass
+        subprocess.run(
+            ["sudo", "systemctl", "stop", "systemd-resolved"],
+            check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+        )
+        dns_config = "nameserver 168.63.129.16\nnameserver 8.8.8.8\noptions timeout:2 attempts:3\n"
+        with open("/tmp/resolv_override.conf", "w") as f:
+            f.write(dns_config)
+        subprocess.run(
+            ["sudo", "cp", "/tmp/resolv_override.conf", "/etc/resolv.conf"],
+            check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+        )
+        print("🌐 [DNS 리졸버 복구 완료] Azure WireServer DNS(168.63.129.16) 적용")
+    except Exception as e:
+        print(f"⚠️ DNS 복구 건너뜀 (로컬 환경 등): {e}")
 
-    # 2. DoH 서비스 조회
-    doh_endpoints = [
-        f"https://dns.google/resolve?name={hostname}&type=A",
-        f"https://cloudflare-dns.com/dns-query?name={hostname}&type=A"
-    ]
-    
-    for url in doh_endpoints:
-        try:
-            req = urllib.request.Request(
-                url,
-                headers={"Accept": "application/dns-json", "User-Agent": "Mozilla/5.0"}
-            )
-            with urllib.request.urlopen(req, timeout=5) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
-                if data.get("Status") == 0 and "Answer" in data:
-                    # A 레코드 검색
-                    for ans in data["Answer"]:
-                        if ans.get("type") == 1:
-                            return ans["data"]
-                    # CNAME만 존재할 경우 대상 호스트 재귀 조회
-                    for ans in data["Answer"]:
-                        if ans.get("type") == 5:
-                            cname_target = ans["data"].rstrip(".")
-                            sub_ip = resolve_ip_via_doh(cname_target)
-                            if sub_ip:
-                                return sub_ip
-        except Exception:
-            continue
-
-    # 3. Azure Front Door 글로벌 Anycast IP Fallback
-    return "13.107.246.40"
-
-TARGET_HOST = "models.inference.ai.azure.com"
-resolved_ip = resolve_ip_via_doh(TARGET_HOST)
-print(f"🌐 [DNS 매핑 완료] {TARGET_HOST} -> {resolved_ip}")
-
-# socket.getaddrinfo 가로채기 적용
-orig_getaddrinfo = socket.getaddrinfo
-def patched_getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
-    if host == TARGET_HOST:
-        p = int(port) if port else 443
-        return [(socket.AF_INET, socket.SOCK_STREAM, 6, '', (resolved_ip, p))]
-    return orig_getaddrinfo(host, port, family, type, proto, flags)
-
-socket.getaddrinfo = patched_getaddrinfo
+# DNS 리졸버 복구 실행
+fix_runner_dns()
 
 # ====================================================
 # 1. 한국 시간대(KST = UTC+9) 및 날짜 포맷 설정
@@ -90,7 +55,7 @@ if not token:
     raise ValueError("GH_MODELS_TOKEN 환경 변수가 설정되지 않았습니다.")
 
 def query_github_models(messages, model="gpt-4o", temperature=0.7, max_tokens=1000, max_retries=4):
-    url = f"https://{TARGET_HOST}/chat/completions"
+    url = "https://models.inference.ai.azure.com/chat/completions"
     payload = {
         "messages": messages,
         "model": model,
