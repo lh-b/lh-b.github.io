@@ -5,10 +5,10 @@ import random
 import time
 import urllib.request
 import urllib.parse
+import urllib.error
 import base64
 from datetime import datetime, timezone, timedelta
 from PIL import Image, ImageDraw
-from openai import OpenAI
 
 # 1. 한국 시간대(KST = UTC+9) 및 날짜 포맷 설정
 KST = timezone(timedelta(hours=9))
@@ -17,56 +17,71 @@ date_dash = now.strftime("%Y-%m-%d")    # YYYY-MM-DD
 date_compact = now.strftime("%Y%m%d")   # YYYYMMDD
 date_full = now.strftime("%Y-%m-%d %H:%M:%S +0900") # 타임존 포함 날짜
 
-# 2. GitHub Models (OpenAI 호환) Client 설정
+# 2. 토큰 검증
 token = os.environ.get("GH_MODELS_TOKEN")
 if not token:
     raise ValueError("GH_MODELS_TOKEN 환경 변수가 설정되지 않았습니다.")
 
-client = OpenAI(
-    base_url="https://models.github.ai/inference",
-    api_key=token,
-)
-
-# 2-1. 안전한 Chat Completion 호출 및 응답 텍스트 검증 래퍼
-def call_chat_completion_with_retry(client_instance, messages, model="gpt-4o", min_len=20, max_retries=4, initial_delay=3, **kwargs):
+# 2-1. GitHub Models 직접 호출 함수 (SDK 미사용, 순수 REST API)
+def query_github_models(messages, model="gpt-4o", temperature=0.7, max_tokens=1000, max_retries=3):
     """
-    OpenAI 응답에서 실제 content 문자열을 안전하게 추출하며,
-    'OK' 등 비정상 단문 응답이 반환될 경우 재시도합니다.
+    OpenAI SDK 호환성 문제 및 'OK' 텍스트 반환 버그를 방지하기 위해
+    GitHub Models API 규격에 맞춰 직접 HTTP POST 호출을 수행합니다.
     """
+    # 1순위: GitHub Models 표준 엔드포인트, 2순위: 대체 엔드포인트
+    endpoints = [
+        "https://models.inference.ai.azure.com/chat/completions",
+        "https://models.github.ai/inference/chat/completions"
+    ]
+    
+    payload = {
+        "messages": messages,
+        "model": model,
+        "temperature": temperature,
+        "max_tokens": max_tokens
+    }
+    json_data = json.dumps(payload).encode("utf-8")
+    
     for attempt in range(1, max_retries + 1):
-        try:
-            response = client_instance.chat.completions.create(
-                messages=messages,
-                model=model,
-                **kwargs
-            )
-            
-            # 응답 객체 파싱
-            content = None
-            if hasattr(response, "choices") and len(response.choices) > 0:
-                choice = response.choices[0]
-                if hasattr(choice, "message") and hasattr(choice.message, "content"):
-                    content = choice.message.content
-            elif isinstance(response, str):
-                content = response
-            
-            # 유효성 검증 ('OK' 또는 공백 응답 필터링)
-            if not content or len(content.strip()) < min_len or content.strip().upper() == "OK":
-                raise ValueError(f"비정상 응답 수신 (내용: '{content}')")
-            
-            return content.strip()
+        for endpoint in endpoints:
+            try:
+                req = urllib.request.Request(
+                    endpoint,
+                    data=json_data,
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {token}",
+                        "User-Agent": "GitHubAction-PostGenerator/1.0"
+                    }
+                )
+                
+                with urllib.request.urlopen(req, timeout=90) as response:
+                    res_body = response.read().decode("utf-8")
+                    
+                    # 단순 상태 텍스트("OK") 필터링
+                    if res_body.strip().upper() == "OK":
+                        continue
+                    
+                    parsed = json.loads(res_body)
+                    if "choices" in parsed and len(parsed["choices"]) > 0:
+                        content = parsed["choices"][0]["message"]["content"]
+                        if content and content.strip().upper() != "OK":
+                            return content.strip()
 
-        except Exception as e:
-            print(f"[시도 {attempt}/{max_retries}] API 호출 중 에러 발생: {e}")
-            if attempt == max_retries:
-                raise RuntimeError(f"최대 재시도 횟수({max_retries}회) 초과: {e}") from e
-            
-            sleep_sec = initial_delay * (2 ** (attempt - 1))
-            print(f"⏳ {sleep_sec}초 후 다시 시도합니다...")
-            time.sleep(sleep_sec)
+            except urllib.error.HTTPError as http_err:
+                err_detail = http_err.read().decode("utf-8", errors="ignore")
+                print(f"[HTTP 오류 {http_err.code}] {endpoint}: {err_detail[:150]}")
+            except Exception as e:
+                print(f"[{endpoint} 호출 실패]: {e}")
+
+        sleep_sec = attempt * 3
+        print(f"⏳ {sleep_sec}초 후 API 재시도 ({attempt}/{max_retries})...")
+        time.sleep(sleep_sec)
+
+    raise RuntimeError("모든 엔드포인트에서 유효한 응답을 수신하지 못했습니다.")
 
 # 3. 최신 IT 동향 및 핵심 기술 주제를 동적으로 가져오는 함수
-def get_latest_tech_topic(client_instance):
+def get_latest_tech_topic():
     fallback_categories = [
         "Agentic AI Systems & Multi-Agent Workflows",
         "Retrieval-Augmented Generation (RAG) & Vector Search",
@@ -92,22 +107,18 @@ def get_latest_tech_topic(client_instance):
     user_prompt = f"오늘 날짜({date_dash}) 기준, 최근 IT 산업에서 가장 주목받고 가치 있는 고난도 기술 주제 1개를 선정해줘."
 
     try:
-        content = call_chat_completion_with_retry(
-            client_instance,
+        topic_raw = query_github_models(
             messages=[
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
+                {"role": "user", "content": user_prompt}
             ],
             model="gpt-4o",
             temperature=0.7,
-            max_tokens=100,
-            min_len=5,
-            max_retries=3,
-            initial_delay=2
+            max_tokens=100
         )
         
-        topic = content.strip().strip('"').strip("'")
-        if topic and topic.upper() != "OK":
+        topic = topic_raw.strip().strip('"').strip("'")
+        if topic and len(topic) > 3 and topic.upper() != "OK":
             print(f"✨ 동적 생성된 최신 IT 주제: {topic}")
             return topic
             
@@ -222,19 +233,15 @@ excerpt_separator: <!--more-->
 해당 분야의 핵심 기술을 선정하여 실무 중심의 기술 문서를 작성하라.
 """
 
-    # 최소 300자 이상의 본문이 수신되어야 정상 통과
-    content = call_chat_completion_with_retry(
-        client,
+    content = query_github_models(
         messages=[
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
+            {"role": "user", "content": user_prompt}
         ],
         model="gpt-4o",
         temperature=0.3,
         max_tokens=3500,
-        min_len=300,
-        max_retries=4,
-        initial_delay=3
+        max_retries=4
     )
     
     return content
@@ -263,7 +270,7 @@ def convert_mermaid_to_image_tag(text):
     pattern = r"```mermaid\s*\n(.*?)```"
     return re.sub(pattern, replace_match, text, flags=re.DOTALL)
 
-# 7. 메인 실행 함수
+# 7. 엔트리포인트 실행
 def main():
     posts_dir = "_posts"
     img_dir = f"assets/images/{date_compact}"
@@ -271,7 +278,7 @@ def main():
     os.makedirs(posts_dir, exist_ok=True)
     os.makedirs(img_dir, exist_ok=True)
 
-    selected_category = get_latest_tech_topic(client)
+    selected_category = get_latest_tech_topic()
     print(f"🎯 최종 작성 주제: {selected_category}")
 
     generate_and_save_image(img_dir, selected_category)
@@ -280,9 +287,8 @@ def main():
     cleaned_content = clean_markdown_output(content)
     final_content = convert_mermaid_to_image_tag(cleaned_content)
     
-    # 최종 본문 유효성 검사 (OK 또는 비정상적인 단문 방지)
     if len(final_content.strip()) < 100 or "---" not in final_content:
-        raise ValueError(f"생성된 포스팅 내용이 유효하지 않습니다 (길이: {len(final_content)}자). 저장을 중단합니다.")
+        raise ValueError(f"유효하지 않은 본문 내용입니다 ({len(final_content)}자). 저장을 취소합니다.")
 
     filename = os.path.join(posts_dir, f"{date_dash}-{date_compact}.md")
     
